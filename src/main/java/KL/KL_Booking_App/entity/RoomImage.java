@@ -7,19 +7,25 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "room_image")
+@Table(name = "RoomImage")
 public class RoomImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "roomImageId")
     private int roomImageId;
+
+    @Column(name = "assetId")
     private String assetId;
+
+    @Column(name = "secureUrl")
     private String secureUrl;
+
     @CreationTimestamp
     @Column(name = "createdAt",updatable = false)
     private Timestamp createdAt;
 
     @UpdateTimestamp
-    @Column(name = "updatedAt",updatable = true)
+    @Column(name = "updatedAt",insertable = false)
     private Timestamp updatedAt;
 
     @ManyToOne

@@ -8,32 +8,50 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "discount")
+@Table(name = "Discount")
 public class Discount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int discountId;
+
     private String code;
+
+    @Column(name = "discountAmount")
     private double discountAmount;
+
+    @Column(name = "expirationDate")
     private LocalDate expirationDate;
+
     @CreationTimestamp
     @Column(name = "createdAt",updatable = false)
     private Timestamp createdAt;
 
     @UpdateTimestamp
-    @Column(name = "updatedAt",updatable = true)
+    @Column(name = "updatedAt",insertable = false)
     private Timestamp updatedAt;
+
+    @OneToOne(mappedBy = "discount")
+    private Reservation reservation;
 
     public Discount() {
     }
 
-    public Discount(int discountId, String code, double discountAmount, LocalDate expirationDate, Timestamp createdAt, Timestamp updatedAt) {
+    public Discount(int discountId, Reservation reservation, Timestamp updatedAt, Timestamp createdAt, LocalDate expirationDate, double discountAmount, String code) {
         this.discountId = discountId;
-        this.code = code;
-        this.discountAmount = discountAmount;
-        this.expirationDate = expirationDate;
-        this.createdAt = createdAt;
+        this.reservation = reservation;
         this.updatedAt = updatedAt;
+        this.createdAt = createdAt;
+        this.expirationDate = expirationDate;
+        this.discountAmount = discountAmount;
+        this.code = code;
+    }
+
+    public Reservation getReservation() {
+        return reservation;
+    }
+
+    public void setReservation(Reservation reservation) {
+        this.reservation = reservation;
     }
 
     public int getDiscountId() {

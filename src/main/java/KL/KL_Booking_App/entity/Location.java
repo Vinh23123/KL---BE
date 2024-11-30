@@ -7,12 +7,14 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "location")
+@Table(name = "Location")
 public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int locationId;
+
     private double latitude;
+
     private double longitude;
 
     @CreationTimestamp
@@ -20,7 +22,7 @@ public class Location {
     private Timestamp createdAt;
 
     @UpdateTimestamp
-    @Column(name = "updatedAt",updatable = true)
+    @Column(name = "updatedAt",insertable = false)
     private Timestamp updatedAt;
 
     @OneToOne(mappedBy = "location")

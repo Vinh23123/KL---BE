@@ -10,15 +10,26 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
-@Table(name = "Rooms")
+@Table(name = "Room")
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int roomId;
+
+    @Column(name = "roomNumber")
     private int roomNumber;
+
     private String description;
+
     private int capacity;
+
+    private double price;
+
+    @Enumerated(EnumType.STRING)
     private RoomType status;
+
+    @Column(name = "viewType")
+    @Enumerated(EnumType.STRING)
     private ViewType viewType;
 
     @CreationTimestamp
@@ -26,7 +37,7 @@ public class Room {
     private Timestamp createdAt;
 
     @UpdateTimestamp
-    @Column(name = "updatedAt",updatable = true)
+    @Column(name = "updatedAt",insertable = false)
     private Timestamp updatedAt;
 
     @ManyToOne
@@ -34,22 +45,38 @@ public class Room {
     private Hotel hotel;
 
     @OneToMany(mappedBy = "room")
+    @Column(name = "roomImage")
     private List<RoomImage> roomImage;
+
+    @OneToMany(mappedBy = "room")
+    private List<ReservationRoom> reservationRoom;
+
+    @OneToMany(mappedBy = "room")
+    private List<Review> reviews;
 
     public Room() {
     }
 
-    public Room(int roomId, int roomNumber, int capacity, String description, RoomType status, ViewType viewType, Timestamp createdAt, Timestamp updatedAt, Hotel hotel, List<RoomImage> roomImage) {
+    public Room(int roomId,  List<ReservationRoom> reservationRoom, List<RoomImage> roomImage, Hotel hotel, Timestamp updatedAt, Timestamp createdAt, ViewType viewType, RoomType status, int capacity, String description, int roomNumber) {
         this.roomId = roomId;
-        this.roomNumber = roomNumber;
+        this.reservationRoom = reservationRoom;
+        this.roomImage = roomImage;
+        this.hotel = hotel;
+        this.updatedAt = updatedAt;
+        this.createdAt = createdAt;
+        this.viewType = viewType;
+        this.status = status;
         this.capacity = capacity;
         this.description = description;
-        this.status = status;
-        this.viewType = viewType;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.hotel = hotel;
-        this.roomImage = roomImage;
+        this.roomNumber = roomNumber;
+    }
+
+    public  List<ReservationRoom> getReservationRoom() {
+        return reservationRoom;
+    }
+
+    public void setReservationRoom( List<ReservationRoom> reservationRoom) {
+        this.reservationRoom = reservationRoom;
     }
 
     public int getRoomId() {

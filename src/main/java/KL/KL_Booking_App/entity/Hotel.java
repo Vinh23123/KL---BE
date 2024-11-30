@@ -8,6 +8,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
+@Table(name = "Hotel")
 public class Hotel {
 
     @Id
@@ -24,7 +25,7 @@ public class Hotel {
     private Timestamp createdAt;
 
     @UpdateTimestamp
-    @Column(name = "updatedAt",updatable = true)
+    @Column(name = "updatedAt",insertable = false)
     private Timestamp updatedAt;
 
     @OneToMany(mappedBy = "hotel")
@@ -33,12 +34,6 @@ public class Hotel {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "location_id", referencedColumnName = "locationId")
     private Location location;
-//    @CreatedBy
-//    private Timestamp createdBy;
-//
-//    @LastModifiedBy
-//    private String updatedBy;
-
 
     public Hotel() {
     }
