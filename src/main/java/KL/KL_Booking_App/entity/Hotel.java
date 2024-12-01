@@ -1,5 +1,7 @@
 package KL.KL_Booking_App.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -13,7 +15,7 @@ public class Hotel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int hotelId;
+    private Long hotelId;
 
     @Column(name = "hotel_name")
     private String hotelName;
@@ -29,16 +31,18 @@ public class Hotel {
     private Timestamp updatedAt;
 
     @OneToMany(mappedBy = "hotel")
+    @JsonBackReference
     private List<Room> rooms;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "location_id", referencedColumnName = "locationId")
+    @JsonManagedReference
     private Location location;
 
     public Hotel() {
     }
 
-    public Hotel(int hotelId, String hotelName, String description, Timestamp createdAt, Timestamp updatedAt, List<Room> rooms, Location location) {
+    public Hotel(Long hotelId, String hotelName, String description, Timestamp createdAt, Timestamp updatedAt, List<Room> rooms, Location location) {
         this.hotelId = hotelId;
         this.hotelName = hotelName;
         this.description = description;
@@ -48,11 +52,11 @@ public class Hotel {
         this.location = location;
     }
 
-    public int getHotelId() {
+    public Long getHotelId() {
         return hotelId;
     }
 
-    public void setHotelId(int hotelId) {
+    public void setHotelId(Long hotelId) {
         this.hotelId = hotelId;
     }
 

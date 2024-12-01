@@ -1,6 +1,8 @@
 package KL.KL_Booking_App.entity;
 
 import KL.KL_Booking_App.entity.reservationType.ReservationType;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -15,7 +17,7 @@ public class Reservation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int reservationId;
+    private Long reservationId;
 
     @Column(name = "reservationType")
     @Enumerated(EnumType.STRING)
@@ -42,9 +44,11 @@ public class Reservation {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "discount_id", referencedColumnName = "discountId")
+    @JsonManagedReference
     private Discount discount;
 
     @OneToMany(mappedBy = "reservation")
+    @JsonBackReference
     private List<ReservationRoom> reservationRoom;
 
     @OneToMany(mappedBy = "reservation")
@@ -53,7 +57,7 @@ public class Reservation {
     public Reservation() {
     }
 
-    public Reservation(int reservationId, ReservationType reservationType, LocalDateTime date, LocalDateTime checkIn, LocalDateTime checkOut, Timestamp createdAt, double totalAmount, Timestamp updatedAt, Discount discount, List<ReservationRoom>  reservationRoom ) {
+    public Reservation(Long reservationId, ReservationType reservationType, LocalDateTime date, LocalDateTime checkIn, LocalDateTime checkOut, Timestamp createdAt, double totalAmount, Timestamp updatedAt, Discount discount, List<ReservationRoom>  reservationRoom ) {
         this.reservationId = reservationId;
         this.reservationType = reservationType;
         this.date = date;
@@ -66,11 +70,11 @@ public class Reservation {
         this.reservationRoom = reservationRoom;
     }
 
-    public int getReservationId() {
+    public Long getReservationId() {
         return reservationId;
     }
 
-    public void setReservationId(int reservationId) {
+    public void setReservationId(Long reservationId) {
         this.reservationId = reservationId;
     }
 

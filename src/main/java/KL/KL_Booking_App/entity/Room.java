@@ -2,6 +2,7 @@ package KL.KL_Booking_App.entity;
 
 import KL.KL_Booking_App.entity.roomType.RoomType;
 import KL.KL_Booking_App.entity.roomType.ViewType;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -14,7 +15,7 @@ import java.util.List;
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int roomId;
+    private Long roomId;
 
     @Column(name = "roomNumber")
     private int roomNumber;
@@ -42,22 +43,26 @@ public class Room {
 
     @ManyToOne
     @JoinColumn(name = "hotel_id", nullable = false)
+    @JsonManagedReference
     private Hotel hotel;
 
     @OneToMany(mappedBy = "room")
     @Column(name = "roomImage")
+    @JsonManagedReference
     private List<RoomImage> roomImage;
 
     @OneToMany(mappedBy = "room")
+    @JsonManagedReference
     private List<ReservationRoom> reservationRoom;
 
     @OneToMany(mappedBy = "room")
+    @JsonManagedReference
     private List<Review> reviews;
 
     public Room() {
     }
 
-    public Room(int roomId,  List<ReservationRoom> reservationRoom, List<RoomImage> roomImage, Hotel hotel, Timestamp updatedAt, Timestamp createdAt, ViewType viewType, RoomType status, int capacity, String description, int roomNumber) {
+    public Room(Long roomId,  List<ReservationRoom> reservationRoom, List<RoomImage> roomImage, Hotel hotel, Timestamp updatedAt, Timestamp createdAt, ViewType viewType, RoomType status, int capacity, String description, int roomNumber) {
         this.roomId = roomId;
         this.reservationRoom = reservationRoom;
         this.roomImage = roomImage;
@@ -79,11 +84,11 @@ public class Room {
         this.reservationRoom = reservationRoom;
     }
 
-    public int getRoomId() {
+    public Long getRoomId() {
         return roomId;
     }
 
-    public void setRoomId(int roomId) {
+    public void setRoomId(Long roomId) {
         this.roomId = roomId;
     }
 

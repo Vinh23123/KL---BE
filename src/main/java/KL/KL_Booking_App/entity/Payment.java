@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int paymentId;
+    private Long paymentId;
 
     private double amount;
 
@@ -47,7 +47,7 @@ public class Payment {
     public Payment() {
     }
 
-    public Payment(int paymentId, double amount, String transactionId, LocalDateTime paymentDate, PaymentType paymentStatus, PaymentMethod paymentMethod, Timestamp createdAt, Timestamp updatedAt, Reservation reservation) {
+    public Payment(Long paymentId, double amount, String transactionId, LocalDateTime paymentDate, PaymentType paymentStatus, PaymentMethod paymentMethod, Timestamp createdAt, Timestamp updatedAt, Reservation reservation) {
         this.paymentId = paymentId;
         this.amount = amount;
         this.transactionId = transactionId;
@@ -59,11 +59,11 @@ public class Payment {
         this.reservation = reservation;
     }
 
-    public int getPaymentId() {
+    public Long getPaymentId() {
         return paymentId;
     }
 
-    public void setPaymentId(int paymentId) {
+    public void setPaymentId(Long paymentId) {
         this.paymentId = paymentId;
     }
 

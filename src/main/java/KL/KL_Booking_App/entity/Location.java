@@ -1,5 +1,6 @@
 package KL.KL_Booking_App.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -11,7 +12,7 @@ import java.sql.Timestamp;
 public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int locationId;
+    private Long locationId;
 
     private double latitude;
 
@@ -26,9 +27,10 @@ public class Location {
     private Timestamp updatedAt;
 
     @OneToOne(mappedBy = "location")
+    @JsonBackReference
     private Hotel hotel;
 
-    public Location(int locationId, Hotel hotel, Timestamp updatedAt, double latitude, Timestamp createdAt, double longitude) {
+    public Location(Long locationId, Hotel hotel, Timestamp updatedAt, double latitude, Timestamp createdAt, double longitude) {
         this.locationId = locationId;
         this.hotel = hotel;
         this.updatedAt = updatedAt;
@@ -40,11 +42,11 @@ public class Location {
     public Location() {
     }
 
-    public int getLocationId() {
+    public Long getLocationId() {
         return locationId;
     }
 
-    public void setLocationId(int locationId) {
+    public void setLocationId(Long locationId) {
         this.locationId = locationId;
     }
 

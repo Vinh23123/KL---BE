@@ -1,5 +1,7 @@
 package KL.KL_Booking_App.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -10,20 +12,23 @@ public class ReservationRoom {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int reservationRoomId;
+    private Long reservationRoomId;
 
     @ManyToOne
     @JoinColumn(name = "reservation_id", referencedColumnName = "reservationId")
+
+    @JsonManagedReference
     private Reservation reservation;
 
     @ManyToOne
     @JoinColumn(name = "room_id", referencedColumnName = "roomId")
+    @JsonBackReference
     private Room room;
 
     public ReservationRoom() {
     }
 
-    public ReservationRoom(int reservationRoomId, Reservation reservation, Room room) {
+    public ReservationRoom(Long reservationRoomId, Reservation reservation, Room room) {
         this.reservationRoomId = reservationRoomId;
         this.reservation = reservation;
         this.room = room;
@@ -37,11 +42,11 @@ public class ReservationRoom {
         this.reservation = reservation;
     }
 
-    public int getReservationRoomId() {
+    public Long getReservationRoomId() {
         return reservationRoomId;
     }
 
-    public void setReservationRoomId(int reservationRoomId) {
+    public void setReservationRoomId(Long reservationRoomId) {
         this.reservationRoomId = reservationRoomId;
     }
 

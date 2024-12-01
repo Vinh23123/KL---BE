@@ -1,5 +1,6 @@
 package KL.KL_Booking_App.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -12,7 +13,7 @@ import java.time.LocalDate;
 public class Discount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int discountId;
+    private Long discountId;
 
     private String code;
 
@@ -31,12 +32,13 @@ public class Discount {
     private Timestamp updatedAt;
 
     @OneToOne(mappedBy = "discount")
+    @JsonBackReference
     private Reservation reservation;
 
     public Discount() {
     }
 
-    public Discount(int discountId, Reservation reservation, Timestamp updatedAt, Timestamp createdAt, LocalDate expirationDate, double discountAmount, String code) {
+    public Discount(Long discountId, Reservation reservation, Timestamp updatedAt, Timestamp createdAt, LocalDate expirationDate, double discountAmount, String code) {
         this.discountId = discountId;
         this.reservation = reservation;
         this.updatedAt = updatedAt;
@@ -54,11 +56,11 @@ public class Discount {
         this.reservation = reservation;
     }
 
-    public int getDiscountId() {
+    public Long getDiscountId() {
         return discountId;
     }
 
-    public void setDiscountId(int discountId) {
+    public void setDiscountId(Long discountId) {
         this.discountId = discountId;
     }
 

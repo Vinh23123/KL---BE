@@ -1,5 +1,6 @@
 package KL.KL_Booking_App.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -14,7 +15,7 @@ public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "reviewId")
-    private int reviewId;
+    private Long reviewId;
 
     private int rating;
 
@@ -35,12 +36,13 @@ public class Review {
 
     @ManyToOne
     @JoinColumn(name = "room_id", nullable = false)
+    @JsonBackReference
     private Room room;
 
     public Review() {
     }
 
-    public Review(int reviewId, int rating, String title, String comment, LocalDateTime reviewDate, Timestamp createdAt, Timestamp updatedAt, Room room) {
+    public Review(Long reviewId, int rating, String title, String comment, LocalDateTime reviewDate, Timestamp createdAt, Timestamp updatedAt, Room room) {
         this.reviewId = reviewId;
         this.rating = rating;
         this.title = title;
@@ -51,11 +53,11 @@ public class Review {
         this.room = room;
     }
 
-    public int getReviewId() {
+    public Long getReviewId() {
         return reviewId;
     }
 
-    public void setReviewId(int reviewId) {
+    public void setReviewId(Long reviewId) {
         this.reviewId = reviewId;
     }
 

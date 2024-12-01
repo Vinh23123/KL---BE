@@ -1,5 +1,6 @@
 package KL.KL_Booking_App.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -12,7 +13,7 @@ public class RoomImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "roomImageId")
-    private int roomImageId;
+    private Long roomImageId;
 
     @Column(name = "assetId")
     private String assetId;
@@ -30,9 +31,10 @@ public class RoomImage {
 
     @ManyToOne
     @JoinColumn(name = "room_id", nullable = false)
+    @JsonBackReference
     private Room room;
 
-    public RoomImage(int roomImageId, String assetId, String secureUrl, Timestamp createdAt, Timestamp updatedAt, Room room) {
+    public RoomImage(Long roomImageId, String assetId, String secureUrl, Timestamp createdAt, Timestamp updatedAt, Room room) {
         this.roomImageId = roomImageId;
         this.assetId = assetId;
         this.secureUrl = secureUrl;
@@ -44,11 +46,11 @@ public class RoomImage {
     public RoomImage() {
     }
 
-    public int getRoomImageId() {
+    public Long getRoomImageId() {
         return roomImageId;
     }
 
-    public void setRoomImageId(int roomImageId) {
+    public void setRoomImageId(Long roomImageId) {
         this.roomImageId = roomImageId;
     }
 
