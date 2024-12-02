@@ -1,7 +1,12 @@
 package KL.KL_Booking_App.service;
 
 import KL.KL_Booking_App.entity.Room;
+import KL.KL_Booking_App.payload.response.RoomDto;
+
+import java.util.List;
 
 public interface IRoomService {
-    Room getRoomById(Long roomId);
+    RoomDto getRoomById(Long roomId);
+
+    List<RoomDto> getAllRooms();
 }

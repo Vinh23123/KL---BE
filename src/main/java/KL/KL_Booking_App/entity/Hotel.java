@@ -3,6 +3,8 @@ package KL.KL_Booking_App.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Max;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -19,6 +21,14 @@ public class Hotel {
 
     @Column(name = "hotel_name")
     private String hotelName;
+
+    @Column(name = "phoneNumber", nullable = false)
+    @Max(value = 10, message = "Phone number max is 10 number")
+    private String phoneNumber;
+
+    @Email
+    @Column(nullable = false)
+    private String email;
 
     private String description;
 
