@@ -9,4 +9,8 @@ public interface IRoomService {
     RoomDto getRoomById(Long roomId);
 
     List<RoomDto> getAllRooms();
+
+    RoomDto createANewRoom(RoomDto roomDto);
+
+    RoomDto updateRoomById(Long roomId, Room room);
 }

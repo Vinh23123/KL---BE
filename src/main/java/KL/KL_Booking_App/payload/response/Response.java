@@ -1,5 +1,7 @@
 package KL.KL_Booking_App.payload.response;
 
+import lombok.Builder;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -8,6 +10,9 @@ public class Response {
     private Object data;
     private String message;
     private String time;
+
+    public Response() {
+    }
 
     public Response(String status, Object data, String message) {
         this.status = status;

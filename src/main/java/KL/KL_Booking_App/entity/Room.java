@@ -4,6 +4,7 @@ import KL.KL_Booking_App.entity.roomType.RoomType;
 import KL.KL_Booking_App.entity.roomType.ViewType;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -16,6 +17,7 @@ import java.util.List;
 @Table(name = "Room")
 @Setter
 @Getter
+@Builder
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

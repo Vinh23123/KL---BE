@@ -2,6 +2,7 @@ package KL.KL_Booking_App.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import lombok.Builder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -9,6 +10,7 @@ import java.sql.Timestamp;
 
 @Entity
 @Table(name = "RoomImage")
+@Builder
 public class RoomImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
