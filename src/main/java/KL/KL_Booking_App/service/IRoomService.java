@@ -10,7 +10,7 @@ public interface IRoomService {
 
     List<RoomDto> getAllRooms();
 
-    RoomDto createANewRoom(RoomDto roomDto);
+    RoomDto createANewRoom(Long hotelId,RoomDto roomDto);
 
     RoomDto updateRoomById(Long roomId, Room room);
 }

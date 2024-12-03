@@ -14,8 +14,6 @@ import lombok.Setter;
 import java.util.List;
 
 @Builder
-@Setter
-@Getter
 public class RoomDto {
     // ou could use @JsonInclude in a getter so that the attribute would be shown if the value is not null.
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -62,4 +60,91 @@ public class RoomDto {
         this.reviews = reviews;
     }
 
+    public Long getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(Long roomId) {
+        this.roomId = roomId;
+    }
+
+    public int getRoomNumber() {
+        return roomNumber;
+    }
+
+    public void setRoomNumber(int roomNumber) {
+        this.roomNumber = roomNumber;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public RoomType getStatus() {
+        return status;
+    }
+
+    public void setStatus(RoomType status) {
+        this.status = status;
+    }
+
+    public ViewType getViewType() {
+        return viewType;
+    }
+
+    public void setViewType(ViewType viewType) {
+        this.viewType = viewType;
+    }
+
+    public Hotel getHotel() {
+        return hotel;
+    }
+
+    public void setHotel(Hotel hotel) {
+        this.hotel = hotel;
+    }
+
+    public List<RoomImageDto> getRoomImageDtos() {
+        return roomImageDtos;
+    }
+
+    public void setRoomImageDtos(List<RoomImageDto> roomImageDtos) {
+        this.roomImageDtos = roomImageDtos;
+    }
+
+    public List<ReservationRoom> getReservationRoom() {
+        return reservationRoom;
+    }
+
+    public void setReservationRoom(List<ReservationRoom> reservationRoom) {
+        this.reservationRoom = reservationRoom;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
 }

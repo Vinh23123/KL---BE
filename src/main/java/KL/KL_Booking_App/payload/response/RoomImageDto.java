@@ -4,8 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
+
 @Builder
 public class RoomImageDto {
 
@@ -20,4 +19,21 @@ public class RoomImageDto {
         this.assetId = assetId;
         this.secureUrl = secureUrl;
     }
+
+    public String getAssetId() {
+        return assetId;
+    }
+
+    public void setAssetId(String assetId) {
+        this.assetId = assetId;
+    }
+
+    public String getSecureUrl() {
+        return secureUrl;
+    }
+
+    public void setSecureUrl(String secureUrl) {
+        this.secureUrl = secureUrl;
+    }
 }
+

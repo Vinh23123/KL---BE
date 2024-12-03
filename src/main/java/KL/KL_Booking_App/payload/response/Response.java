@@ -1,5 +1,6 @@
 package KL.KL_Booking_App.payload.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 
 import java.text.SimpleDateFormat;
@@ -7,6 +8,8 @@ import java.util.Date;
 
 public class Response {
     private String status;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Object data;
     private String message;
     private String time;

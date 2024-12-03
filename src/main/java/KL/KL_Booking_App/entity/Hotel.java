@@ -1,6 +1,7 @@
 package KL.KL_Booking_App.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -41,12 +42,13 @@ public class Hotel {
     private Timestamp updatedAt;
 
     @OneToMany(mappedBy = "hotel")
-    @JsonBackReference
+//    @JsonBackReference
     private List<Room> rooms;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "location_id", referencedColumnName = "locationId")
-    @JsonManagedReference
+//    @JsonManagedReference
+    @JsonIgnore
     private Location location;
 
     public Hotel() {

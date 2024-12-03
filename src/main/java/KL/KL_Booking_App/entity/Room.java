@@ -2,6 +2,7 @@ package KL.KL_Booking_App.entity;
 
 import KL.KL_Booking_App.entity.roomType.RoomType;
 import KL.KL_Booking_App.entity.roomType.ViewType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -15,8 +16,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "Room")
-@Setter
-@Getter
 @Builder
 public class Room {
     @Id
@@ -49,36 +48,146 @@ public class Room {
 
     @ManyToOne
     @JoinColumn(name = "hotel_id", nullable = false)
-    @JsonManagedReference
+//    @JsonManagedReference
+    @JsonIgnore
     private Hotel hotel;
 
     @OneToMany(mappedBy = "room")
     @Column(name = "roomImage")
-    @JsonManagedReference
+//    @JsonManagedReference
+    @JsonIgnore
     private List<RoomImage> roomImage;
 
     @OneToMany(mappedBy = "room")
-    @JsonManagedReference
+//    @JsonManagedReference
+    @JsonIgnore
     private List<ReservationRoom> reservationRoom;
 
     @OneToMany(mappedBy = "room")
-    @JsonManagedReference
+//    @JsonManagedReference
+    @JsonIgnore
     private List<Review> reviews;
 
     public Room() {
     }
 
-    public Room(Long roomId,  List<ReservationRoom> reservationRoom, List<RoomImage> roomImage, Hotel hotel, Timestamp updatedAt, Timestamp createdAt, ViewType viewType, RoomType status, int capacity, String description, int roomNumber) {
+    public Room(Long roomId, int roomNumber, String description, int capacity, double price, RoomType status, ViewType viewType, Timestamp createdAt, Timestamp updatedAt, Hotel hotel, List<RoomImage> roomImage, List<ReservationRoom> reservationRoom, List<Review> reviews) {
         this.roomId = roomId;
-        this.reservationRoom = reservationRoom;
-        this.roomImage = roomImage;
-        this.hotel = hotel;
-        this.updatedAt = updatedAt;
-        this.createdAt = createdAt;
-        this.viewType = viewType;
-        this.status = status;
-        this.capacity = capacity;
-        this.description = description;
         this.roomNumber = roomNumber;
+        this.description = description;
+        this.capacity = capacity;
+        this.price = price;
+        this.status = status;
+        this.viewType = viewType;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.hotel = hotel;
+        this.roomImage = roomImage;
+        this.reservationRoom = reservationRoom;
+        this.reviews = reviews;
+    }
+
+    public Long getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(Long roomId) {
+        this.roomId = roomId;
+    }
+
+    public int getRoomNumber() {
+        return roomNumber;
+    }
+
+    public void setRoomNumber(int roomNumber) {
+        this.roomNumber = roomNumber;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public RoomType getStatus() {
+        return status;
+    }
+
+    public void setStatus(RoomType status) {
+        this.status = status;
+    }
+
+    public ViewType getViewType() {
+        return viewType;
+    }
+
+    public void setViewType(ViewType viewType) {
+        this.viewType = viewType;
+    }
+
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Timestamp getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Hotel getHotel() {
+        return hotel;
+    }
+
+    public void setHotel(Hotel hotel) {
+        this.hotel = hotel;
+    }
+
+    public List<RoomImage> getRoomImage() {
+        return roomImage;
+    }
+
+    public void setRoomImage(List<RoomImage> roomImage) {
+        this.roomImage = roomImage;
+    }
+
+    public List<ReservationRoom> getReservationRoom() {
+        return reservationRoom;
+    }
+
+    public void setReservationRoom(List<ReservationRoom> reservationRoom) {
+        this.reservationRoom = reservationRoom;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
     }
 }

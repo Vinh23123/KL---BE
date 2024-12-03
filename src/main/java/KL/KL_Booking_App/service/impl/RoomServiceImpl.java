@@ -1,12 +1,15 @@
 package KL.KL_Booking_App.service.impl;
 
+import KL.KL_Booking_App.entity.Hotel;
 import KL.KL_Booking_App.entity.Room;
 import KL.KL_Booking_App.entity.RoomImage;
 import KL.KL_Booking_App.entity.roomType.RoomType;
 import KL.KL_Booking_App.exeption.ResourceNotFoundException;
 import KL.KL_Booking_App.payload.response.RoomDto;
 import KL.KL_Booking_App.payload.response.RoomImageDto;
+import KL.KL_Booking_App.repository.RoomImageRepository;
 import KL.KL_Booking_App.repository.RoomRepository;
+import KL.KL_Booking_App.service.IHotelService;
 import KL.KL_Booking_App.service.IRoomImageService;
 import KL.KL_Booking_App.service.IRoomService;
 import org.springframework.stereotype.Service;
@@ -18,11 +21,14 @@ public class RoomServiceImpl implements IRoomService {
 
     private final RoomRepository roomRepository;
 
-    private final IRoomImageService roomImageService;
+    private final RoomImageRepository roomImageRepository;
 
-    public RoomServiceImpl(RoomRepository roomRepository, IRoomService roomImageService, IRoomImageService roomImageService1) {
+    private final IHotelService hotelService;
+
+    public RoomServiceImpl(RoomRepository roomRepository , RoomImageRepository roomImageRepository, IHotelService hotelService) {
         this.roomRepository = roomRepository;
-        this.roomImageService = roomImageService1;
+        this.roomImageRepository = roomImageRepository;
+        this.hotelService = hotelService;
     }
 
 
@@ -40,31 +46,21 @@ public class RoomServiceImpl implements IRoomService {
     }
 
     @Override
-    public RoomDto createANewRoom(RoomDto roomDto) {
-        // modify exception later
-        // room number
-        roomRepository.findById(roomDto.getRoomId()).orElseThrow(() -> new ResourceNotFoundException("Room", "Id", roomDto.getRoomId()));
+    public RoomDto createANewRoom(Long hotelId, RoomDto roomDto) {
 
-        // if room image is larger than 5 -> throw exception
-        if (roomDto.getRoomImageDtos().size() > 5 ){
-            throw new RuntimeException("List Image is greater than 5 images");
-        }
+        Hotel hotel = hotelService.findHotelById(hotelId);
 
-        // convert image to url and asset id
-
-        Room room = Room.builder()
+        Room room = Room
+                .builder()
                 .roomNumber(roomDto.getRoomNumber())
                 .description(roomDto.getDescription())
                 .capacity(roomDto.getCapacity())
                 .status(RoomType.AVAILABLE)
-                .viewType(roomDto.getViewType()).build();
+                .viewType(roomDto.getViewType())
+                .hotel(hotel)
+                .build();
         // save a room
         roomRepository.save(room);
-
-        // save room image
-        roomDto.getRoomImageDtos().stream().map(this::mapRoomImageToEntity)
-                .forEach(roomImageService::saveRoomImage);
-
 
         return mapToDto(room);
     }
@@ -81,11 +77,6 @@ public class RoomServiceImpl implements IRoomService {
                 .capacity(room.getCapacity())
                 .status(room.getStatus())
                 .viewType(room.getViewType())
-                .roomImageDtos(
-                        room.getRoomImage()
-                        .stream()
-                        .map(this::mapRoomImageToDto).toList()
-                )
                 .build();
     }
 

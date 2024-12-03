@@ -36,7 +36,7 @@ public class Review {
 
     @ManyToOne
     @JoinColumn(name = "room_id", nullable = false)
-    @JsonBackReference
+//    @JsonBackReference
     private Room room;
 
     public Review() {

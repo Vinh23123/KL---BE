@@ -34,7 +34,7 @@ public class Discount {
     private Timestamp updatedAt;
 
     @OneToOne(mappedBy = "discount")
-    @JsonBackReference
+//    @JsonBackReference
     private Reservation reservation;
 
     public Discount() {
