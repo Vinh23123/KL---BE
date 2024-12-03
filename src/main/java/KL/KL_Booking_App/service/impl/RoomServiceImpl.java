@@ -10,7 +10,6 @@ import KL.KL_Booking_App.payload.response.RoomImageDto;
 import KL.KL_Booking_App.repository.RoomImageRepository;
 import KL.KL_Booking_App.repository.RoomRepository;
 import KL.KL_Booking_App.service.IHotelService;
-import KL.KL_Booking_App.service.IRoomImageService;
 import KL.KL_Booking_App.service.IRoomService;
 import org.springframework.stereotype.Service;
 
@@ -49,7 +48,6 @@ public class RoomServiceImpl implements IRoomService {
     public RoomDto createANewRoom(Long hotelId, RoomDto roomDto) {
 
         Hotel hotel = hotelService.findHotelById(hotelId);
-
         Room room = Room
                 .builder()
                 .roomNumber(roomDto.getRoomNumber())
@@ -66,12 +64,29 @@ public class RoomServiceImpl implements IRoomService {
     }
 
     @Override
-    public RoomDto updateRoomById(Long roomId, Room room) {
-        return null;
+    public RoomDto updateRoomById(Long hotelId, Long roomId, RoomDto roomDto) {
+
+        Hotel hotel = hotelService.findHotelById(hotelId);
+        List<Room> roomList = hotel.getRooms();
+        Room matchRoom = roomList.stream()
+                .filter((room) -> room.getRoomId().equals(roomId))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Room", "Id", roomId));
+
+        matchRoom.setRoomNumber(roomDto.getRoomNumber());
+        matchRoom.setDescription(roomDto.getDescription());
+        matchRoom.setCapacity(roomDto.getCapacity());
+        matchRoom.setStatus(roomDto.getStatus());
+        matchRoom.setViewType(roomDto.getViewType());
+        // save a room
+        roomRepository.save(matchRoom);
+
+        return mapToDto(matchRoom);
     }
 
     private RoomDto mapToDto(Room room){
         return RoomDto.builder()
+                .roomId(room.getRoomId())
                 .roomNumber(room.getRoomNumber())
                 .description(room.getDescription())
                 .capacity(room.getCapacity())
