@@ -8,9 +8,9 @@ import java.util.List;
 public interface IRoomService {
     RoomDto getRoomById(Long roomId);
 
-    List<RoomDto> getAllRooms();
+    List<RoomDto> getAllRoomsByHotelId(Long hotelId);
 
     RoomDto createANewRoom(Long hotelId,RoomDto roomDto);
 
-    RoomDto updateRoomById(Long hotelId, Long roomId ,RoomDto roomDto);
+    RoomDto updateRoomById(RoomDto roomDto);
 }

@@ -3,13 +3,10 @@ package KL.KL_Booking_App.payload.response;
 import KL.KL_Booking_App.entity.Hotel;
 import KL.KL_Booking_App.entity.ReservationRoom;
 import KL.KL_Booking_App.entity.Review;
-import KL.KL_Booking_App.entity.RoomImage;
 import KL.KL_Booking_App.entity.roomType.RoomType;
 import KL.KL_Booking_App.entity.roomType.ViewType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.List;
 

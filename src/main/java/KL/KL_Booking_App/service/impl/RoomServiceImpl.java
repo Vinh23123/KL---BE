@@ -7,7 +7,6 @@ import KL.KL_Booking_App.entity.roomType.RoomType;
 import KL.KL_Booking_App.exeption.ResourceNotFoundException;
 import KL.KL_Booking_App.payload.response.RoomDto;
 import KL.KL_Booking_App.payload.response.RoomImageDto;
-import KL.KL_Booking_App.repository.RoomImageRepository;
 import KL.KL_Booking_App.repository.RoomRepository;
 import KL.KL_Booking_App.service.IHotelService;
 import KL.KL_Booking_App.service.IRoomService;
@@ -20,17 +19,14 @@ public class RoomServiceImpl implements IRoomService {
 
     private final RoomRepository roomRepository;
 
-    private final RoomImageRepository roomImageRepository;
-
     private final IHotelService hotelService;
 
-    public RoomServiceImpl(RoomRepository roomRepository , RoomImageRepository roomImageRepository, IHotelService hotelService) {
+    public RoomServiceImpl(RoomRepository roomRepository, IHotelService hotelService) {
         this.roomRepository = roomRepository;
-        this.roomImageRepository = roomImageRepository;
         this.hotelService = hotelService;
     }
 
-
+    // get room by room id according to hotel id
     @Override
     public RoomDto getRoomById(Long roomId) {
         Room room = roomRepository.findById(roomId).orElseThrow(() -> new ResourceNotFoundException("Room", "Id", roomId));
@@ -39,8 +35,8 @@ public class RoomServiceImpl implements IRoomService {
     }
 
     @Override
-    public List<RoomDto> getAllRooms() {
-        List<Room> rooms =  roomRepository.findAll();
+    public List<RoomDto> getAllRoomsByHotelId(Long hotelId) {
+        List<Room> rooms = roomRepository.findByHotelId(hotelId);
         return rooms.stream().map(this::mapToDto).toList();
     }
 
@@ -64,24 +60,18 @@ public class RoomServiceImpl implements IRoomService {
     }
 
     @Override
-    public RoomDto updateRoomById(Long hotelId, Long roomId, RoomDto roomDto) {
+    public RoomDto updateRoomById(RoomDto roomDto) {
+        Room room = roomRepository.findById(roomDto.getRoomId()).orElseThrow(() -> new ResourceNotFoundException("Room", "Id", roomDto.getRoomId()));
 
-        Hotel hotel = hotelService.findHotelById(hotelId);
-        List<Room> roomList = hotel.getRooms();
-        Room matchRoom = roomList.stream()
-                .filter((room) -> room.getRoomId().equals(roomId))
-                .findFirst()
-                .orElseThrow(() -> new ResourceNotFoundException("Room", "Id", roomId));
-
-        matchRoom.setRoomNumber(roomDto.getRoomNumber());
-        matchRoom.setDescription(roomDto.getDescription());
-        matchRoom.setCapacity(roomDto.getCapacity());
-        matchRoom.setStatus(roomDto.getStatus());
-        matchRoom.setViewType(roomDto.getViewType());
+        room.setRoomNumber(roomDto.getRoomNumber());
+        room.setDescription(roomDto.getDescription());
+        room.setCapacity(roomDto.getCapacity());
+        room.setStatus(roomDto.getStatus());
+        room.setViewType(roomDto.getViewType());
         // save a room
-        roomRepository.save(matchRoom);
+        roomRepository.save(room);
 
-        return mapToDto(matchRoom);
+        return mapToDto(room);
     }
 
     private RoomDto mapToDto(Room room){

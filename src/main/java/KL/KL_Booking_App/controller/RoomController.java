@@ -29,7 +29,7 @@ public class RoomController {
         this.roomService = roomService;
     }
 
-    @GetMapping(HotelApi.HOTEL_BY_ID + RoomApi.ROOM_BY_ID)
+    @GetMapping(RoomApi.ROOM_BY_ID)
     public ResponseEntity<Response> getRoomById(@PathVariable(value = "roomId") Long roomId){
         try{
         RoomDto roomDto = roomService.getRoomById(roomId);
@@ -51,8 +51,8 @@ public class RoomController {
     }
 
     @GetMapping(HotelApi.HOTEL_BY_ID + RoomApi.ROOMS)
-    public ResponseEntity<Response> getAllRooms(){
-        List<RoomDto> roomDtos = roomService.getAllRooms();
+    public ResponseEntity<Response> fetchAllRoomsByHotelId(@PathVariable(value = "hotelId") Long hotelId){
+        List<RoomDto> roomDtos = roomService.getAllRoomsByHotelId(hotelId);
         Response response = new Response(
                 Global.STATUS_SUCCESS,
                 roomDtos, Global.MESSAGE_GET_SUCCESSFULLY );
@@ -83,13 +83,11 @@ public class RoomController {
         }
     }
 
-    @PutMapping(HotelApi.HOTEL_BY_ID + RoomApi.ROOM_BY_ID)
-    public ResponseEntity<Response> updateRoomById(@PathVariable(value = "hotelId") Long hotelId,
-                                                   @PathVariable(value = "roomId") Long roomId,
-                                                   @RequestBody RoomDto roomDto){
+    @PutMapping(RoomApi.ROOMS)
+    public ResponseEntity<Response> updateRoomById(@RequestBody RoomDto roomDto){
         try {
             // Call service to create a new room
-            RoomDto roomDtoResponse = roomService.updateRoomById(hotelId, roomId, roomDto);
+            RoomDto roomDtoResponse = roomService.updateRoomById(roomDto);
             // Prepare successful response
             Response response = new Response(
                     Global.STATUS_SUCCESS,
