@@ -1,8 +1,13 @@
 package KL.KL_Booking_App.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Max;
+import lombok.Builder;
+import lombok.Value;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -11,14 +16,23 @@ import java.util.List;
 
 @Entity
 @Table(name = "Hotel")
+@Builder
 public class Hotel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
     private Long hotelId;
 
     @Column(name = "hotel_name")
     private String hotelName;
+
+    @Column(name = "phoneNumber")
+    @Max(value = 10, message = "Phone number max is 10 number")
+    private String phoneNumber;
+
+    @Email
+    private String email;
 
     private String description;
 
@@ -31,25 +45,44 @@ public class Hotel {
     private Timestamp updatedAt;
 
     @OneToMany(mappedBy = "hotel")
-    @JsonBackReference
+//    @JsonBackReference
     private List<Room> rooms;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "location_id", referencedColumnName = "locationId")
-    @JsonManagedReference
+//    @JsonManagedReference
+    @JsonIgnore
     private Location location;
 
     public Hotel() {
     }
 
-    public Hotel(Long hotelId, String hotelName, String description, Timestamp createdAt, Timestamp updatedAt, List<Room> rooms, Location location) {
+    public Hotel(Long hotelId, String hotelName, String phoneNumber, String email, String description, Timestamp createdAt, Timestamp updatedAt, List<Room> rooms, Location location) {
         this.hotelId = hotelId;
         this.hotelName = hotelName;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
         this.description = description;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.rooms = rooms;
         this.location = location;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Long getHotelId() {

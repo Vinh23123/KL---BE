@@ -1,6 +1,7 @@
 package KL.KL_Booking_App.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -16,13 +17,12 @@ public class ReservationRoom {
 
     @ManyToOne
     @JoinColumn(name = "reservation_id", referencedColumnName = "reservationId")
-
-    @JsonManagedReference
+    @JsonIgnore
     private Reservation reservation;
 
     @ManyToOne
-    @JoinColumn(name = "room_id", referencedColumnName = "roomId")
-    @JsonBackReference
+    @JoinColumn(name = "room_id", referencedColumnName = "roomId", nullable = true)
+    @JsonIgnore
     private Room room;
 
     public ReservationRoom() {

@@ -1,6 +1,7 @@
 package KL.KL_Booking_App.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -27,7 +28,8 @@ public class Location {
     private Timestamp updatedAt;
 
     @OneToOne(mappedBy = "location")
-    @JsonBackReference
+//    @JsonBackReference
+    @JsonIgnore
     private Hotel hotel;
 
     public Location(Long locationId, Hotel hotel, Timestamp updatedAt, double latitude, Timestamp createdAt, double longitude) {

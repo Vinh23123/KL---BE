@@ -1,25 +1,21 @@
-package KL.KL_Booking_App.entity;
+package KL.KL_Booking_App.payload.response;
 
+import KL.KL_Booking_App.entity.Hotel;
+import KL.KL_Booking_App.entity.ReservationRoom;
+import KL.KL_Booking_App.entity.Review;
 import KL.KL_Booking_App.entity.roomType.RoomType;
 import KL.KL_Booking_App.entity.roomType.ViewType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
-import java.sql.Timestamp;
 import java.util.List;
 
-@Entity
-@Table(name = "Room")
 @Builder
-public class Room {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class RoomDto {
+    // ou could use @JsonInclude in a getter so that the attribute would be shown if the value is not null.
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Long roomId;
 
-    @Column(name = "roomNumber")
     private int roomNumber;
 
     private String description;
@@ -28,48 +24,26 @@ public class Room {
 
     private double price;
 
-    @Enumerated(EnumType.STRING)
     private RoomType status;
 
-    @Column(name = "viewType")
-    @Enumerated(EnumType.STRING)
     private ViewType viewType;
 
-    @CreationTimestamp
-    @Column(name = "createdAt",updatable = false)
-    private Timestamp createdAt;
-
-    @UpdateTimestamp
-    @Column(name = "updatedAt",insertable = false)
-    private Timestamp updatedAt;
-
-    @ManyToOne
-    @JoinColumn(name = "hotel_id")
-//    @JsonManagedReference
-    @JsonIgnore
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Hotel hotel;
 
-    // orphanRemoval = true -> delete orphaned entities from the database.
-    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Column(name = "roomImage")
-//    @JsonManagedReference
-    @JsonIgnore
-    private List<RoomImage> roomImage;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private List<RoomImageDto> roomImageDtos;
 
-    @OneToMany(mappedBy = "room")
-//    @JsonManagedReference
-    @JsonIgnore
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<ReservationRoom> reservationRoom;
 
-    @OneToMany(mappedBy = "room")
-//    @JsonManagedReference
-    @JsonIgnore
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<Review> reviews;
 
-    public Room() {
+    public RoomDto() {
     }
 
-    public Room(Long roomId, int roomNumber, String description, int capacity, double price, RoomType status, ViewType viewType, Timestamp createdAt, Timestamp updatedAt, Hotel hotel, List<RoomImage> roomImage, List<ReservationRoom> reservationRoom, List<Review> reviews) {
+    public RoomDto(Long roomId, int roomNumber, String description, int capacity, double price, RoomType status, ViewType viewType, Hotel hotel, List<RoomImageDto> roomImageDtos, List<ReservationRoom> reservationRoom, List<Review> reviews) {
         this.roomId = roomId;
         this.roomNumber = roomNumber;
         this.description = description;
@@ -77,10 +51,8 @@ public class Room {
         this.price = price;
         this.status = status;
         this.viewType = viewType;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
         this.hotel = hotel;
-        this.roomImage = roomImage;
+        this.roomImageDtos = roomImageDtos;
         this.reservationRoom = reservationRoom;
         this.reviews = reviews;
     }
@@ -141,22 +113,6 @@ public class Room {
         this.viewType = viewType;
     }
 
-    public Timestamp getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Timestamp getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Timestamp updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
     public Hotel getHotel() {
         return hotel;
     }
@@ -165,12 +121,12 @@ public class Room {
         this.hotel = hotel;
     }
 
-    public List<RoomImage> getRoomImage() {
-        return roomImage;
+    public List<RoomImageDto> getRoomImageDtos() {
+        return roomImageDtos;
     }
 
-    public void setRoomImage(List<RoomImage> roomImage) {
-        this.roomImage = roomImage;
+    public void setRoomImageDtos(List<RoomImageDto> roomImageDtos) {
+        this.roomImageDtos = roomImageDtos;
     }
 
     public List<ReservationRoom> getReservationRoom() {

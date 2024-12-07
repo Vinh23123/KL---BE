@@ -35,8 +35,8 @@ public class Review {
     private Timestamp updatedAt;
 
     @ManyToOne
-    @JoinColumn(name = "room_id", nullable = false)
-    @JsonBackReference
+    @JoinColumn(name = "room_id")
+//    @JsonBackReference
     private Room room;
 
     public Review() {

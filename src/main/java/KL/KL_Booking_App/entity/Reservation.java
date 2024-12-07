@@ -2,6 +2,7 @@ package KL.KL_Booking_App.entity;
 
 import KL.KL_Booking_App.entity.reservationType.ReservationType;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -44,11 +45,12 @@ public class Reservation {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "discount_id", referencedColumnName = "discountId")
-    @JsonManagedReference
+//    @JsonManagedReference
+    @JsonIgnore
     private Discount discount;
 
     @OneToMany(mappedBy = "reservation")
-    @JsonBackReference
+//    @JsonBackReference
     private List<ReservationRoom> reservationRoom;
 
     @OneToMany(mappedBy = "reservation")

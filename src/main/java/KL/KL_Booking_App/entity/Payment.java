@@ -41,7 +41,7 @@ public class Payment {
     private Timestamp updatedAt;
 
     @ManyToOne
-    @JoinColumn(name = "reservation_id", nullable = true)
+    @JoinColumn(name = "reservation_id")
     private Reservation reservation;
 
     public Payment() {
