@@ -33,30 +33,37 @@ public class RoomController {
     public ResponseEntity<Response> getRoomById(@PathVariable(value = "roomId") Long roomId){
         try{
         RoomDto roomDto = roomService.getRoomById(roomId);
-        Response response = new Response(
-                Global.STATUS_SUCCESS,
-                roomDto, Global.MESSAGE_GET_SUCCESSFULLY );
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(
+                Response.builder()
+                        .status(Global.STATUS_SUCCESS)
+                        .data(roomDto)
+                        .message(Global.MESSAGE_GET_SUCCESSFULLY )
+                        .time(new SimpleDateFormat("dd-MM-yyyy").format(new Date()))
+                        .build()
+                , HttpStatus.OK);
         } catch (Exception e) {
-            // Handle error, create failure response
-            Response response = new Response();
-            response.setStatus(Global.STATUS_FAILED);
-            response.setMessage(e.getMessage());
-            // Set current date formatted in dd-MM-yyyy
-            response.setTime(new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
-            // Log the exception with error level
             log.error("Error creating new room", e);
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(
+                    Response.builder()
+                            .status(Global.STATUS_FAILED)
+                            .message(e.getMessage())
+                            .time(new SimpleDateFormat("dd-MM-yyyy").format(new Date()))
+                            .build()
+                    , HttpStatus.NOT_FOUND);
         }
     }
 
     @GetMapping(HotelApi.HOTEL_BY_ID + RoomApi.ROOMS)
     public ResponseEntity<Response> fetchAllRoomsByHotelId(@PathVariable(value = "hotelId") Long hotelId){
         List<RoomDto> roomDtos = roomService.getAllRoomsByHotelId(hotelId);
-        Response response = new Response(
-                Global.STATUS_SUCCESS,
-                roomDtos, Global.MESSAGE_GET_SUCCESSFULLY );
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(
+                Response.builder()
+                        .status(Global.STATUS_SUCCESS)
+                        .data(roomDtos)
+                        .message(Global.MESSAGE_GET_SUCCESSFULLY)
+                        .time(new SimpleDateFormat("dd-MM-yyyy").format(new Date()))
+                        .build()
+                , HttpStatus.OK);
     }
 
     @PostMapping(HotelApi.HOTEL_BY_ID + RoomApi.ROOMS)
@@ -64,22 +71,24 @@ public class RoomController {
         try {
             // Call service to create a new room
             RoomDto roomDtoResponse = roomService.createANewRoom(hotelId, roomDto);
-            // Prepare successful response
-            Response response = new Response(
-                    Global.STATUS_SUCCESS,
-                    roomDtoResponse,
-                    Global.MESSAGE_CREATED_SUCCESSFULLY);
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
+            return new ResponseEntity<>(
+                    Response.builder()
+                            .status(Global.STATUS_SUCCESS)
+                            .data(roomDtoResponse)
+                            .message(Global.MESSAGE_CREATED_SUCCESSFULLY)
+                            .time(new SimpleDateFormat("dd-MM-yyyy").format(new Date()))
+                            .build()
+                    , HttpStatus.CREATED);
         } catch (Exception e) {
-            // Handle error, create failure response
-            Response response = new Response();
-            response.setStatus(Global.STATUS_FAILED);
-            response.setMessage(e.getMessage());
-            // Set current date formatted in dd-MM-yyyy
-            response.setTime(new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
             // Log the exception with error level
             log.error("Error creating new room", e);
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(
+                    Response.builder()
+                            .status(Global.STATUS_FAILED)
+                            .message(e.getMessage())
+                            .time(new SimpleDateFormat("dd-MM-yyyy").format(new Date()))
+                            .build()
+                    , HttpStatus.NOT_FOUND);
         }
     }
 
@@ -89,21 +98,44 @@ public class RoomController {
             // Call service to create a new room
             RoomDto roomDtoResponse = roomService.updateRoomById(roomDto);
             // Prepare successful response
-            Response response = new Response(
-                    Global.STATUS_SUCCESS,
-                    roomDtoResponse,
-                    Global.MESSAGE_CREATED_SUCCESSFULLY);
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
+            return new ResponseEntity<>(
+                    Response.builder()
+                            .status(Global.STATUS_SUCCESS)
+                            .data(roomDtoResponse)
+                            .message(Global.MESSAGE_CREATED_SUCCESSFULLY)
+                            .build()
+                    ,HttpStatus.CREATED);
         } catch (Exception e) {
-            // Handle error, create failure response
-            Response response = new Response();
-            response.setStatus(Global.STATUS_FAILED);
-            response.setMessage(e.getMessage());
-            // Set current date formatted in dd-MM-yyyy
-            response.setTime(new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
             // Log the exception with error level
             log.error("Error creating new room", e);
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(
+                    Response.builder()
+                            .status(Global.STATUS_FAILED)
+                            .message(e.getMessage())
+                            .time(new SimpleDateFormat("dd-MM-yyyy").format(new Date()))
+                            .build()
+                    , HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping(RoomApi.ROOM_BY_ID)
+    public ResponseEntity<Response> deleteRoomById(@PathVariable(value = "roomId") Long roomId){
+        try{
+            roomService.deleteRoomById(roomId);
+            return new ResponseEntity<>(Response.builder()
+                    .status(Global.STATUS_SUCCESS)
+                    .message(Global.MESSAGE_DELETED_SUCCESSFULLY)
+                    .time(new SimpleDateFormat("dd-MM-yyyy").format(new Date()))
+                    .build(), HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Error delete a room", e);
+            return new ResponseEntity<>(
+                    Response.builder()
+                            .status(Global.STATUS_FAILED)
+                            .message(e.getMessage())
+                            .time(new SimpleDateFormat("dd-MM-yyyy").format(new Date()))
+                            .build()
+                    ,HttpStatus.NOT_FOUND);
         }
     }
 

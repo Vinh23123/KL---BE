@@ -10,6 +10,7 @@ import KL.KL_Booking_App.payload.response.RoomImageDto;
 import KL.KL_Booking_App.repository.RoomRepository;
 import KL.KL_Booking_App.service.IHotelService;
 import KL.KL_Booking_App.service.IRoomService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,7 +37,7 @@ public class RoomServiceImpl implements IRoomService {
 
     @Override
     public List<RoomDto> getAllRoomsByHotelId(Long hotelId) {
-        List<Room> rooms = roomRepository.findByHotelId(hotelId);
+        List<Room> rooms = roomRepository.findByHotelHotelId(hotelId);
         return rooms.stream().map(this::mapToDto).toList();
     }
 
@@ -72,6 +73,13 @@ public class RoomServiceImpl implements IRoomService {
         roomRepository.save(room);
 
         return mapToDto(room);
+    }
+
+    @Transactional
+    @Override
+    public void deleteRoomById(Long roomId) {
+        Room room = roomRepository.findById(roomId).orElseThrow(() -> new ResourceNotFoundException("Room", "Id", roomId));
+        roomRepository.delete(room);
     }
 
     private RoomDto mapToDto(Room room){

@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
 import lombok.Builder;
+import lombok.Value;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -20,17 +21,17 @@ public class Hotel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
     private Long hotelId;
 
     @Column(name = "hotel_name")
     private String hotelName;
 
-    @Column(name = "phoneNumber", nullable = false)
+    @Column(name = "phoneNumber")
     @Max(value = 10, message = "Phone number max is 10 number")
     private String phoneNumber;
 
     @Email
-    @Column(nullable = false)
     private String email;
 
     private String description;
@@ -56,9 +57,11 @@ public class Hotel {
     public Hotel() {
     }
 
-    public Hotel(Long hotelId, String hotelName, String description, Timestamp createdAt, Timestamp updatedAt, List<Room> rooms, Location location) {
+    public Hotel(Long hotelId, String hotelName, String phoneNumber, String email, String description, Timestamp createdAt, Timestamp updatedAt, List<Room> rooms, Location location) {
         this.hotelId = hotelId;
         this.hotelName = hotelName;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
         this.description = description;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;

@@ -6,6 +6,7 @@ import lombok.Builder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+@Builder
 public class Response {
     private String status;
 
@@ -15,6 +16,18 @@ public class Response {
     private String time;
 
     public Response() {
+    }
+
+    public Response(String status, Object data, String message, String time) {
+        this.status = status;
+        this.data = data;
+        this.message = message;
+        this.time = time;
+    }
+
+    public Response(String status, String message) {
+        this.status = status;
+        this.message = message;
     }
 
     public Response(String status, Object data, String message) {

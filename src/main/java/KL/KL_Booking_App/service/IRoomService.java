@@ -13,4 +13,6 @@ public interface IRoomService {
     RoomDto createANewRoom(Long hotelId,RoomDto roomDto);
 
     RoomDto updateRoomById(RoomDto roomDto);
+
+    void deleteRoomById(Long roomId);
 }

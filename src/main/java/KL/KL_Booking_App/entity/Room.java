@@ -3,11 +3,8 @@ package KL.KL_Booking_App.entity;
 import KL.KL_Booking_App.entity.roomType.RoomType;
 import KL.KL_Booking_App.entity.roomType.ViewType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -47,12 +44,13 @@ public class Room {
     private Timestamp updatedAt;
 
     @ManyToOne
-    @JoinColumn(name = "hotel_id", nullable = false)
+    @JoinColumn(name = "hotel_id")
 //    @JsonManagedReference
     @JsonIgnore
     private Hotel hotel;
 
-    @OneToMany(mappedBy = "room")
+    // orphanRemoval = true -> delete orphaned entities from the database.
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     @Column(name = "roomImage")
 //    @JsonManagedReference
     @JsonIgnore
