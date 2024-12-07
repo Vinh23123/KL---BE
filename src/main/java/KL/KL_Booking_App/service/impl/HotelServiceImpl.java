@@ -37,19 +37,28 @@ public class HotelServiceImpl implements IHotelService {
     }
 
     @Override
-    public void delete(Hotel hotel) {
+    public void delete(HotelDto hotelDto) {
+        Hotel hotel = mapToEntity(hotelDto);
         hotelRepository.delete(hotel);
     }
 
     @Override
     public HotelDto update(HotelDto hotelDto){
         Hotel hotel = findHotelById(hotelDto.getHotelId());
+
+        hotel.setHotelName(hotelDto.getHotelName());
+        hotel.setPhoneNumber(hotelDto.getPhoneNumber());
+        hotel.setEmail(hotelDto.getEmail());
+        hotel.setDescription(hotelDto.getDescription());
+
         Hotel updatedhotel = hotelRepository.save(hotel);
         return mapToDto(updatedhotel);
     }
 
     private HotelDto mapToDto(Hotel hotel){
         return HotelDto.builder()
+                .hotelId(hotel.getHotelId())
+                .hotelName(hotel.getHotelName())
                 .phoneNumber(hotel.getPhoneNumber())
                 .email(hotel.getEmail())
                 .description(hotel.getDescription())
@@ -58,6 +67,7 @@ public class HotelServiceImpl implements IHotelService {
 
     private Hotel mapToEntity(HotelDto hotelDto){
         return Hotel.builder()
+                .hotelName(hotelDto.getHotelName())
                 .phoneNumber(hotelDto.getPhoneNumber())
                 .email(hotelDto.getEmail())
                 .description(hotelDto.getDescription())

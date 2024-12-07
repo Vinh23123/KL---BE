@@ -12,7 +12,7 @@ public interface IHotelService {
 
    HotelDto save(HotelDto hotelDto);
 
-   void delete(Hotel hotel);
+   void delete(HotelDto hotelDto);
 
    HotelDto update(HotelDto hotelDto);
 }

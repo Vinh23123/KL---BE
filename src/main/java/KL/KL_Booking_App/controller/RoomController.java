@@ -126,7 +126,8 @@ public class RoomController {
                     .status(Global.STATUS_SUCCESS)
                     .message(Global.MESSAGE_DELETED_SUCCESSFULLY)
                     .time(new SimpleDateFormat("dd-MM-yyyy").format(new Date()))
-                    .build(), HttpStatus.OK);
+                    .build(),
+                    HttpStatus.OK);
         } catch (Exception e) {
             log.error("Error delete a room", e);
             return new ResponseEntity<>(

@@ -4,7 +4,8 @@ import KL.KL_Booking_App.entity.Location;
 import KL.KL_Booking_App.entity.Room;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
 
 import java.util.List;
@@ -13,10 +14,14 @@ public class HotelDto {
 
     private Long hotelId;
 
-    @Max(value = 10, message = "Phone number max is 10 number")
+    private String hotelName;
+
+    @NotNull(message = "Phone number must not be null.")
+    @Pattern(regexp = "^\\d{10}$", message = "Phone number must be exactly 10 digits.")
     private String phoneNumber;
 
     @Email
+    @NotNull
     private String email;
 
     private String description;
@@ -30,13 +35,22 @@ public class HotelDto {
     public HotelDto() {
     }
 
-    public HotelDto(Long hotelId, String phoneNumber, String email, String description, List<Room> rooms, Location location) {
+    public HotelDto(Long hotelId, String hotelName, String phoneNumber, String email, String description, List<Room> rooms, Location location) {
         this.hotelId = hotelId;
+        this.hotelName = hotelName;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.description = description;
         this.rooms = rooms;
         this.location = location;
+    }
+
+    public String getHotelName() {
+        return hotelName;
+    }
+
+    public void setHotelName(String hotelName) {
+        this.hotelName = hotelName;
     }
 
     public String getPhoneNumber() {
