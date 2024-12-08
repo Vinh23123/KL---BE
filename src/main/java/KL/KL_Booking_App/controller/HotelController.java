@@ -51,7 +51,7 @@ public class HotelController {
     }
 
     @PutMapping(HotelApi.HOTELS)
-    public ResponseEntity<Response> updateHotelById(@RequestBody HotelDto hotelDto){
+    public ResponseEntity<Response> updateHotelById(@Valid @RequestBody HotelDto hotelDto){
         try {
             HotelDto updatehotelDto = hotelService.update(hotelDto);
             return new ResponseEntity<>(
@@ -101,7 +101,7 @@ public class HotelController {
     }
 
     @DeleteMapping(HotelApi.HOTEL_BY_ID)
-    public ResponseEntity<Response> deleteHotel(@RequestBody HotelDto hotelDto){
+    public ResponseEntity<Response> deleteHotel(@Valid @RequestBody HotelDto hotelDto){
         try {
             hotelService.delete(hotelDto);
             return new ResponseEntity<>(

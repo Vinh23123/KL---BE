@@ -3,9 +3,7 @@ package KL.KL_Booking_App.payload.response;
 import KL.KL_Booking_App.entity.Location;
 import KL.KL_Booking_App.entity.Room;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 import lombok.Builder;
 
 import java.util.List;
@@ -14,14 +12,16 @@ public class HotelDto {
 
     private Long hotelId;
 
+    @NotBlank(message = "Hotel Name must not be empty")
     private String hotelName;
 
-    @NotNull(message = "Phone number must not be null.")
+    @NotBlank(message = "Phone number must not be blank.")
     @Pattern(regexp = "^\\d{10}$", message = "Phone number must be exactly 10 digits.")
     private String phoneNumber;
 
     @Email
-    @NotNull
+    // not null, not an empty string, and does not consist entirely of whitespace.
+    @NotBlank(message = "Email must not be blank")
     private String email;
 
     private String description;

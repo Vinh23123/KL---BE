@@ -2,10 +2,10 @@ package KL.KL_Booking_App.payload.response;
 
 public class ErrorResponse {
     private String status;
-    private String message;
+    private Object message;
     private String time;
 
-    public ErrorResponse(String status, String message, String time) {
+    public ErrorResponse(String status, Object message, String time) {
         this.status = status;
         this.message = message;
         this.time = time;
@@ -20,7 +20,7 @@ public class ErrorResponse {
         this.status = status;
     }
 
-    public String getMessage() {
+    public Object getMessage() {
         return message;
     }
 

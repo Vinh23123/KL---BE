@@ -15,7 +15,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
@@ -36,18 +38,24 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                                                                   HttpHeaders headers,
                                                                   HttpStatusCode status,
                                                                   WebRequest request) {
-        // Extract validation errors from BindingResult
-        BindingResult result = ex.getBindingResult();
+        // Create a map to store field-specific error messages
+        Map<String, String> fieldErrors = new HashMap<>();
 
-        // Collect all error messages
-        List<String> errorMessages = result.getAllErrors().stream()
-                .map(ObjectError::getDefaultMessage)
+        // Extract validation errors from the BindingResult
+        List<String> errorMessages = ex.getBindingResult().getAllErrors().stream()
+                .map(error -> {
+                    String fieldName = ((org.springframework.validation.FieldError) error).getField();
+                    String errorMessage = error.getDefaultMessage();
+                    fieldErrors.put(fieldName, errorMessage);
+                    return fieldName + ": " + errorMessage; // Optionally return the field with the error message
+                })
                 .collect(Collectors.toList());
 
         // Create a custom error response
-        String message = String.join(", ", errorMessages);
-        ErrorResponse errorResponse = new ErrorResponse("FAILED", message, new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
+        String message = String.join(", ", errorMessages); // Optional, concatenate field errors
+        ErrorResponse errorResponse = new ErrorResponse("FAILED", fieldErrors, new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
 
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        // Return detailed error response with field-specific errors
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

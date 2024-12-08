@@ -45,13 +45,9 @@ public class Hotel {
     private Timestamp updatedAt;
 
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
-//    @JsonBackReference
     private List<Room> rooms;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "location_id", referencedColumnName = "locationId")
-//    @JsonManagedReference
-    @JsonIgnore
+    @OneToOne(mappedBy = "hotel",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Location location;
 
     public Hotel() {
