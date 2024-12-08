@@ -5,11 +5,13 @@ import KL.KL_Booking_App.entity.Room;
 import KL.KL_Booking_App.entity.RoomImage;
 import KL.KL_Booking_App.entity.roomType.RoomType;
 import KL.KL_Booking_App.exeption.ResourceNotFoundException;
+import KL.KL_Booking_App.payload.response.HotelDto;
 import KL.KL_Booking_App.payload.response.RoomDto;
 import KL.KL_Booking_App.payload.response.RoomImageDto;
 import KL.KL_Booking_App.repository.RoomRepository;
 import KL.KL_Booking_App.service.IHotelService;
 import KL.KL_Booking_App.service.IRoomService;
+import KL.KL_Booking_App.utils.HotelUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 

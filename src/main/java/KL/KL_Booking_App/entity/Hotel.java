@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
 import lombok.Value;
 import org.hibernate.annotations.CreationTimestamp;
@@ -28,10 +30,8 @@ public class Hotel {
     private String hotelName;
 
     @Column(name = "phoneNumber")
-    @Max(value = 10, message = "Phone number max is 10 number")
     private String phoneNumber;
 
-    @Email
     private String email;
 
     private String description;
@@ -44,14 +44,10 @@ public class Hotel {
     @Column(name = "updatedAt",insertable = false)
     private Timestamp updatedAt;
 
-    @OneToMany(mappedBy = "hotel")
-//    @JsonBackReference
+    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
     private List<Room> rooms;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "location_id", referencedColumnName = "locationId")
-//    @JsonManagedReference
-    @JsonIgnore
+    @OneToOne(mappedBy = "hotel",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Location location;
 
     public Hotel() {

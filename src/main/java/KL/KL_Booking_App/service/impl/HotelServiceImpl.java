@@ -5,6 +5,7 @@ import KL.KL_Booking_App.exeption.ResourceNotFoundException;
 import KL.KL_Booking_App.payload.response.HotelDto;
 import KL.KL_Booking_App.repository.HotelRepository;
 import KL.KL_Booking_App.service.IHotelService;
+import KL.KL_Booking_App.utils.HotelUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,9 +14,11 @@ import java.util.List;
 public class HotelServiceImpl implements IHotelService {
 
     private final HotelRepository hotelRepository;
+    private final HotelUtils hotelUtils;
 
-    public HotelServiceImpl(HotelRepository hotelRepository) {
+    public HotelServiceImpl(HotelRepository hotelRepository, HotelUtils hotelUtils) {
         this.hotelRepository = hotelRepository;
+        this.hotelUtils = hotelUtils;
     }
 
     @Override
@@ -26,42 +29,33 @@ public class HotelServiceImpl implements IHotelService {
     @Override
     public List<HotelDto> getAll() {
         List<Hotel> hotels = hotelRepository.findAll();
-        return hotels.stream().map(this::mapToDto).toList();
+        return hotels.stream().map(hotelUtils::mapToDto).toList();
     }
 
     @Override
     public HotelDto save(HotelDto hotelDto) {
-        Hotel hotel =  mapToEntity(hotelDto);
+        Hotel hotel =  hotelUtils.mapToEntity(hotelDto);
         Hotel savedhotel = hotelRepository.save(hotel);
-        return mapToDto(savedhotel);
+        return hotelUtils.mapToDto(savedhotel);
     }
 
     @Override
-    public void delete(Hotel hotel) {
+    public void delete(HotelDto hotelDto) {
+        Hotel hotel = hotelUtils.mapToEntity(hotelDto);
         hotelRepository.delete(hotel);
     }
 
     @Override
     public HotelDto update(HotelDto hotelDto){
         Hotel hotel = findHotelById(hotelDto.getHotelId());
+        hotel.setHotelName(hotelDto.getHotelName());
+        hotel.setPhoneNumber(hotelDto.getPhoneNumber());
+        hotel.setEmail(hotelDto.getEmail());
+        hotel.setDescription(hotelDto.getDescription());
+
         Hotel updatedhotel = hotelRepository.save(hotel);
-        return mapToDto(updatedhotel);
+        return hotelUtils.mapToDto(updatedhotel);
     }
 
-    private HotelDto mapToDto(Hotel hotel){
-        return HotelDto.builder()
-                .phoneNumber(hotel.getPhoneNumber())
-                .email(hotel.getEmail())
-                .description(hotel.getDescription())
-                .build();
-    }
-
-    private Hotel mapToEntity(HotelDto hotelDto){
-        return Hotel.builder()
-                .phoneNumber(hotelDto.getPhoneNumber())
-                .email(hotelDto.getEmail())
-                .description(hotelDto.getDescription())
-                .build();
-    }
 
 }

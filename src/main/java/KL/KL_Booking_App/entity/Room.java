@@ -45,24 +45,20 @@ public class Room {
 
     @ManyToOne
     @JoinColumn(name = "hotel_id")
-//    @JsonManagedReference
     @JsonIgnore
     private Hotel hotel;
 
     // orphanRemoval = true -> delete orphaned entities from the database.
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     @Column(name = "roomImage")
-//    @JsonManagedReference
     @JsonIgnore
     private List<RoomImage> roomImage;
 
     @OneToMany(mappedBy = "room")
-//    @JsonManagedReference
     @JsonIgnore
     private List<ReservationRoom> reservationRoom;
 
     @OneToMany(mappedBy = "room")
-//    @JsonManagedReference
     @JsonIgnore
     private List<Review> reviews;
 

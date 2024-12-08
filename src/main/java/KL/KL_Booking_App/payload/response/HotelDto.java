@@ -3,8 +3,7 @@ package KL.KL_Booking_App.payload.response;
 import KL.KL_Booking_App.entity.Location;
 import KL.KL_Booking_App.entity.Room;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.*;
 import lombok.Builder;
 
 import java.util.List;
@@ -13,10 +12,16 @@ public class HotelDto {
 
     private Long hotelId;
 
-    @Max(value = 10, message = "Phone number max is 10 number")
+    @NotBlank(message = "Hotel Name must not be empty")
+    private String hotelName;
+
+    @NotBlank(message = "Phone number must not be blank.")
+    @Pattern(regexp = "^\\d{10}$", message = "Phone number must be exactly 10 digits.")
     private String phoneNumber;
 
     @Email
+    // not null, not an empty string, and does not consist entirely of whitespace.
+    @NotBlank(message = "Email must not be blank")
     private String email;
 
     private String description;
@@ -30,13 +35,22 @@ public class HotelDto {
     public HotelDto() {
     }
 
-    public HotelDto(Long hotelId, String phoneNumber, String email, String description, List<Room> rooms, Location location) {
+    public HotelDto(Long hotelId, String hotelName, String phoneNumber, String email, String description, List<Room> rooms, Location location) {
         this.hotelId = hotelId;
+        this.hotelName = hotelName;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.description = description;
         this.rooms = rooms;
         this.location = location;
+    }
+
+    public String getHotelName() {
+        return hotelName;
+    }
+
+    public void setHotelName(String hotelName) {
+        this.hotelName = hotelName;
     }
 
     public String getPhoneNumber() {

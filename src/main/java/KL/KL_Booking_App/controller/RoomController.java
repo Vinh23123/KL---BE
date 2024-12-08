@@ -6,6 +6,7 @@ import KL.KL_Booking_App.constants.api.RoomApi;
 import KL.KL_Booking_App.payload.response.Response;
 import KL.KL_Booking_App.payload.response.RoomDto;
 import KL.KL_Booking_App.service.IRoomService;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -67,7 +68,7 @@ public class RoomController {
     }
 
     @PostMapping(HotelApi.HOTEL_BY_ID + RoomApi.ROOMS)
-    public ResponseEntity<Response> createANewRoom(@PathVariable(value = "hotelId") Long hotelId,@RequestBody RoomDto roomDto){
+    public ResponseEntity<Response> createANewRoom(@PathVariable(value = "hotelId") Long hotelId,@Valid @RequestBody RoomDto roomDto){
         try {
             // Call service to create a new room
             RoomDto roomDtoResponse = roomService.createANewRoom(hotelId, roomDto);
@@ -93,7 +94,7 @@ public class RoomController {
     }
 
     @PutMapping(RoomApi.ROOMS)
-    public ResponseEntity<Response> updateRoomById(@RequestBody RoomDto roomDto){
+    public ResponseEntity<Response> updateRoomById(@Valid @RequestBody RoomDto roomDto){
         try {
             // Call service to create a new room
             RoomDto roomDtoResponse = roomService.updateRoomById(roomDto);
@@ -126,7 +127,8 @@ public class RoomController {
                     .status(Global.STATUS_SUCCESS)
                     .message(Global.MESSAGE_DELETED_SUCCESSFULLY)
                     .time(new SimpleDateFormat("dd-MM-yyyy").format(new Date()))
-                    .build(), HttpStatus.OK);
+                    .build(),
+                    HttpStatus.OK);
         } catch (Exception e) {
             log.error("Error delete a room", e);
             return new ResponseEntity<>(
