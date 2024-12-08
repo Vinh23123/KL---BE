@@ -51,7 +51,6 @@ public class Room {
     // orphanRemoval = true -> delete orphaned entities from the database.
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     @Column(name = "roomImage")
-    @JsonIgnore
     private List<RoomImage> roomImage;
 
     @OneToMany(mappedBy = "room")

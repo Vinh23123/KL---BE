@@ -5,13 +5,12 @@ import KL.KL_Booking_App.entity.Room;
 import KL.KL_Booking_App.entity.RoomImage;
 import KL.KL_Booking_App.entity.roomType.RoomType;
 import KL.KL_Booking_App.exeption.ResourceNotFoundException;
-import KL.KL_Booking_App.payload.response.HotelDto;
 import KL.KL_Booking_App.payload.response.RoomDto;
 import KL.KL_Booking_App.payload.response.RoomImageDto;
 import KL.KL_Booking_App.repository.RoomRepository;
 import KL.KL_Booking_App.service.IHotelService;
 import KL.KL_Booking_App.service.IRoomService;
-import KL.KL_Booking_App.utils.HotelUtils;
+import KL.KL_Booking_App.utils.RoomUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -24,9 +23,12 @@ public class RoomServiceImpl implements IRoomService {
 
     private final IHotelService hotelService;
 
-    public RoomServiceImpl(RoomRepository roomRepository, IHotelService hotelService) {
+    private final RoomUtils roomUtils;
+
+    public RoomServiceImpl(RoomRepository roomRepository, IHotelService hotelService, RoomUtils roomUtils) {
         this.roomRepository = roomRepository;
         this.hotelService = hotelService;
+        this.roomUtils = roomUtils;
     }
 
     // get room by room id according to hotel id
@@ -34,13 +36,13 @@ public class RoomServiceImpl implements IRoomService {
     public RoomDto getRoomById(Long roomId) {
         Room room = roomRepository.findById(roomId).orElseThrow(() -> new ResourceNotFoundException("Room", "Id", roomId));
         // return dto later
-        return mapToDto(room);
+        return roomUtils.mapToRoomDto(room);
     }
 
     @Override
     public List<RoomDto> getAllRoomsByHotelId(Long hotelId) {
         List<Room> rooms = roomRepository.findByHotelHotelId(hotelId);
-        return rooms.stream().map(this::mapToDto).toList();
+        return rooms.stream().map(roomUtils::mapToRoomDto).toList();
     }
 
     @Override
@@ -59,7 +61,7 @@ public class RoomServiceImpl implements IRoomService {
         // save a room
         roomRepository.save(room);
 
-        return mapToDto(room);
+        return roomUtils.mapToRoomDto(room);
     }
 
     @Override
@@ -74,7 +76,7 @@ public class RoomServiceImpl implements IRoomService {
         // save a room
         roomRepository.save(room);
 
-        return mapToDto(room);
+        return roomUtils.mapToRoomDto(room);
     }
 
     @Transactional
@@ -82,31 +84,6 @@ public class RoomServiceImpl implements IRoomService {
     public void deleteRoomById(Long roomId) {
         Room room = roomRepository.findById(roomId).orElseThrow(() -> new ResourceNotFoundException("Room", "Id", roomId));
         roomRepository.delete(room);
-    }
-
-    private RoomDto mapToDto(Room room){
-        return RoomDto.builder()
-                .roomId(room.getRoomId())
-                .roomNumber(room.getRoomNumber())
-                .description(room.getDescription())
-                .capacity(room.getCapacity())
-                .status(room.getStatus())
-                .viewType(room.getViewType())
-                .build();
-    }
-
-    private RoomImageDto mapRoomImageToDto(RoomImage roomImage){
-        return RoomImageDto.builder()
-                .assetId(roomImage.getAssetId())
-                .secureUrl(roomImage.getSecureUrl())
-                .build();
-    }
-
-    private RoomImage mapRoomImageToEntity(RoomImageDto roomImageDto){
-        return RoomImage.builder()
-                .assetId(roomImageDto.getAssetId())
-                .secureUrl(roomImageDto.getSecureUrl())
-                .build();
     }
 
 }

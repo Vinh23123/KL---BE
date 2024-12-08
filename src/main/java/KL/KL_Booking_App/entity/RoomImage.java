@@ -1,6 +1,7 @@
 package KL.KL_Booking_App.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Builder;
 import org.hibernate.annotations.CreationTimestamp;
@@ -20,6 +21,12 @@ public class RoomImage {
     @Column(name = "assetId")
     private String assetId;
 
+    private String publicId;
+
+    private String signature;
+
+    private String format;
+
     @Column(name = "secureUrl")
     private String secureUrl;
 
@@ -33,16 +40,45 @@ public class RoomImage {
 
     @ManyToOne
     @JoinColumn(name = "room_id", nullable = false)
+    @JsonIgnore
+
 //    @JsonBackReference
     private Room room;
 
-    public RoomImage(Long roomImageId, String assetId, String secureUrl, Timestamp createdAt, Timestamp updatedAt, Room room) {
+    public RoomImage(Long roomImageId, String assetId, String publicId, String signature, String format, String secureUrl, Timestamp createdAt, Timestamp updatedAt, Room room) {
         this.roomImageId = roomImageId;
         this.assetId = assetId;
+        this.publicId = publicId;
+        this.signature = signature;
+        this.format = format;
         this.secureUrl = secureUrl;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.room = room;
+    }
+
+    public String getPublicId() {
+        return publicId;
+    }
+
+    public void setPublicId(String publicId) {
+        this.publicId = publicId;
+    }
+
+    public String getSignature() {
+        return signature;
+    }
+
+    public void setSignature(String signature) {
+        this.signature = signature;
+    }
+
+    public String getFormat() {
+        return format;
+    }
+
+    public void setFormat(String format) {
+        this.format = format;
     }
 
     public RoomImage() {
