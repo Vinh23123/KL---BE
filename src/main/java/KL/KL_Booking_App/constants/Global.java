@@ -9,14 +9,14 @@ public class Global {
     public final static String MESSAGE_GET_FAILED = "GET DATA FAILED";
 
     // CREATE
-    public final static String MESSAGE_CREATED_SUCCESSFULLY = "CREATE A DATA SUCCESSFULLY";
-    public final static String MESSAGE_CREATED_FAILED = "CREATE A DATA FAILED";
+    public final static String MESSAGE_CREATED_SUCCESSFULLY = "CREATE DATA SUCCESSFULLY";
+    public final static String MESSAGE_CREATED_FAILED = "CREATE DATA FAILED";
 
     // UPDATE
-    public final static String MESSAGE_UPDATED_SUCCESSFULLY = "UPDATE A DATA SUCCESSFULLY";
-    public final static String MESSAGE_UPDATED_FAILED = "UPDATE A DATA FAILED";
+    public final static String MESSAGE_UPDATED_SUCCESSFULLY = "UPDATE DATA SUCCESSFULLY";
+    public final static String MESSAGE_UPDATED_FAILED = "UPDATE DATA FAILED";
 
     // DELETE
-    public final static String MESSAGE_DELETED_SUCCESSFULLY = "DELETE A DATA SUCCESSFULLY";
-    public final static String MESSAGE_DELETED_FAILED = "DELETE A DATA FAILED";
+    public final static String MESSAGE_DELETED_SUCCESSFULLY = "DELETE DATA SUCCESSFULLY";
+    public final static String MESSAGE_DELETED_FAILED = "DELETE DATA FAILED";
 }
