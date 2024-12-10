@@ -8,9 +8,6 @@ import java.io.IOException;
 import java.util.List;
 
 public interface IRoomImageService {
-    RoomImageDto uploadImage(MultipartFile file, Long roomId) throws IOException;
-    List<RoomImageDto> getAllRoomImages();
-    RoomImageDto updateRoomImage(RoomImageDto roomImageDto);
-    RoomImageDto fetchRoomImage(Long roomImageId);
+    List<RoomImageDto> uploadImage(List<MultipartFile> files, Long roomId) throws IOException;
     void deleteRoomImage(Long roomImageId);
 }

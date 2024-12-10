@@ -68,4 +68,26 @@ public class LocationController {
                     .build(), HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping(LocationApi.LOCATIONS + "/convert-location")
+    public ResponseEntity<Response> convertLocationToAddress(@Valid @RequestBody LocationDto locationDto){
+
+        try {
+        LocationDto address = locationService.convertLatLongToAddress(locationDto);
+            return new ResponseEntity<>( Response.builder()
+                    .status(Global.STATUS_SUCCESS)
+                    .data(address)
+                    .message(Global.MESSAGE_GET_SUCCESSFULLY)
+                    .time(new SimpleDateFormat("dd-MM-yyyy").format(new Date()))
+                    .build(), HttpStatus.CREATED);
+        }catch (Exception e){
+            log.info(e.getMessage());
+            return new ResponseEntity<>( Response.builder()
+                    .status(Global.STATUS_FAILED)
+                    .message(e.getMessage())
+                    .time(new SimpleDateFormat("dd-MM-yyyy").format(new Date()))
+                    .build(), HttpStatus.NOT_FOUND);
+        }
+    }
+
 }

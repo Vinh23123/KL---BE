@@ -8,11 +8,13 @@ import org.springframework.stereotype.Component;
 public class RoomImageUtils {
     public RoomImageDto mapRoomImageToDto(RoomImage roomImage){
         return RoomImageDto.builder()
+                .roomImageId(roomImage.getRoomImageId())
                 .assetId(roomImage.getAssetId())
                 .publicId(roomImage.getPublicId())
                 .signature(roomImage.getSignature())
                 .format(roomImage.getFormat())
                 .secureUrl(roomImage.getSecureUrl())
+                .assetFolder(roomImage.getAssetFolder())
                 .build();
     }
 

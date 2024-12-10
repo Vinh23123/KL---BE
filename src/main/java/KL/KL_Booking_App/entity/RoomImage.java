@@ -27,6 +27,8 @@ public class RoomImage {
 
     private String format;
 
+    private String assetFolder;
+
     @Column(name = "secureUrl")
     private String secureUrl;
 
@@ -45,16 +47,25 @@ public class RoomImage {
 //    @JsonBackReference
     private Room room;
 
-    public RoomImage(Long roomImageId, String assetId, String publicId, String signature, String format, String secureUrl, Timestamp createdAt, Timestamp updatedAt, Room room) {
+    public RoomImage(Long roomImageId, String assetId, String publicId, String signature, String format, String assetFolder, String secureUrl, Timestamp createdAt, Timestamp updatedAt, Room room) {
         this.roomImageId = roomImageId;
         this.assetId = assetId;
         this.publicId = publicId;
         this.signature = signature;
         this.format = format;
+        this.assetFolder = assetFolder;
         this.secureUrl = secureUrl;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.room = room;
+    }
+
+    public String getAssetFolder() {
+        return assetFolder;
+    }
+
+    public void setAssetFolder(String assetFolder) {
+        this.assetFolder = assetFolder;
     }
 
     public String getPublicId() {
