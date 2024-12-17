@@ -1,24 +1,29 @@
 package KL.KL_Booking_App.service.impl;
 
 import KL.KL_Booking_App.entity.Hotel;
+import KL.KL_Booking_App.entity.User;
 import KL.KL_Booking_App.exeption.ResourceNotFoundException;
 import KL.KL_Booking_App.payload.response.HotelDto;
 import KL.KL_Booking_App.repository.HotelRepository;
+import KL.KL_Booking_App.repository.UserRepository;
 import KL.KL_Booking_App.service.IHotelService;
 import KL.KL_Booking_App.utils.HotelUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class HotelServiceImpl implements IHotelService {
 
     private final HotelRepository hotelRepository;
     private final HotelUtils hotelUtils;
+    private final UserRepository userRepository;
 
-    public HotelServiceImpl(HotelRepository hotelRepository, HotelUtils hotelUtils) {
+    public HotelServiceImpl(HotelRepository hotelRepository, HotelUtils hotelUtils, UserRepository userRepository) {
         this.hotelRepository = hotelRepository;
         this.hotelUtils = hotelUtils;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -28,12 +33,16 @@ public class HotelServiceImpl implements IHotelService {
 
     @Override
     public List<HotelDto> getAll() {
-        List<Hotel> hotels = hotelRepository.findAll();
-        return hotels.stream().map(hotelUtils::mapToDto).toList();
+        long userId = 1;
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
+
+        List<Hotel> reservations = hotelRepository.findByUserUserId(user.getUserId());
+        return reservations.stream().map(hotelUtils::mapToDto).collect(Collectors.toList());
     }
 
     @Override
     public HotelDto save(HotelDto hotelDto) {
+        // retrieve current user id to add hotel
         Hotel hotel =  hotelUtils.mapToEntity(hotelDto);
         Hotel savedhotel = hotelRepository.save(hotel);
         return hotelUtils.mapToDto(savedhotel);

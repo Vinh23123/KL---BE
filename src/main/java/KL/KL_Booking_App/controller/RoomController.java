@@ -140,5 +140,4 @@ public class RoomController {
                     ,HttpStatus.NOT_FOUND);
         }
     }
-
 }

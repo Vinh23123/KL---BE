@@ -22,7 +22,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
+import java.nio.charset.StandardCharsets;
 
 @Service
 public class LocationServiceImpl implements ILocationService {
@@ -109,6 +111,59 @@ public class LocationServiceImpl implements ILocationService {
                     }
                 } else {
                     log.error("Error from Goong API: " + jsonObjectRes.getString("message"));
+            }
+        } catch (IOException e) {
+            log.error("IOException occurred while calling Goong API: " + e.getMessage());
+            throw new RuntimeException("Error occurred while retrieving address", e);
+        }
+
+        // Return the original locationDto in case of failure or empty result
+        return locationDto;
+    }
+
+    @Override
+    public LocationDto convertAddressToLatLong(LocationDto locationDto) {
+
+//      When you send a JSON object with a formatted address like "443 Đường Tam Trinh", special characters like Đ may cause issues in URLs if not properly encoded.
+        String encodedAddress = URLEncoder.encode(locationDto.getFormattedAddress(), StandardCharsets.UTF_8);
+        String url = "https://rsapi.goong.io/geocode?address=" + encodedAddress + "&api_key=" +  API_KEY_GOONG;
+
+        HttpGet httpGet = new HttpGet(url);
+        try (CloseableHttpClient httpClient = HttpClients.createDefault();
+             CloseableHttpResponse response = httpClient.execute(httpGet)) {
+            HttpEntity httpEntity = response.getEntity();
+            String responseString = EntityUtils.toString(httpEntity);
+            JSONObject jsonObjectRes = new JSONObject(responseString);
+
+            // Check if the status is "OK"
+            if (jsonObjectRes.getString("status").equals("OK")) {
+                // Check if there are any results
+                if (jsonObjectRes.getJSONArray("results").length() > 0) {
+                    String formattedAddress = jsonObjectRes.getJSONArray("results")
+                            .getJSONObject(0)
+                            .getString("formatted_address");
+
+                    double latitude = jsonObjectRes.getJSONArray("results")
+                            .getJSONObject(0)
+                            .getJSONObject("geometry").getJSONObject("location").getDouble("lat");
+
+                    double longitude = jsonObjectRes.getJSONArray("results")
+                            .getJSONObject(0)
+                            .getJSONObject("geometry").getJSONObject("location").getDouble("lng");
+
+                    log.info("Address: " + formattedAddress);
+
+                    // Return the LocationDto with the address
+                    return LocationDto.builder()
+                            .latitude(latitude)
+                            .longitude(longitude)
+                            .formattedAddress(formattedAddress)
+                            .build();
+                } else {
+                    log.warn("No results found for the given coordinates.");
+                }
+            } else {
+                log.error("Error from Goong API: " + jsonObjectRes.getString("message"));
             }
         } catch (IOException e) {
             log.error("IOException occurred while calling Goong API: " + e.getMessage());

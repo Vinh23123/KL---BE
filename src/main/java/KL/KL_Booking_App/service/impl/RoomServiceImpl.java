@@ -9,6 +9,7 @@ import KL.KL_Booking_App.payload.response.RoomDto;
 import KL.KL_Booking_App.payload.response.RoomImageDto;
 import KL.KL_Booking_App.repository.RoomRepository;
 import KL.KL_Booking_App.service.IHotelService;
+import KL.KL_Booking_App.service.IReservationService;
 import KL.KL_Booking_App.service.IRoomService;
 import KL.KL_Booking_App.utils.RoomUtils;
 import jakarta.transaction.Transactional;
@@ -21,11 +22,13 @@ public class RoomServiceImpl implements IRoomService {
 
     private final RoomRepository roomRepository;
 
+
+
     private final IHotelService hotelService;
 
     private final RoomUtils roomUtils;
 
-    public RoomServiceImpl(RoomRepository roomRepository, IHotelService hotelService, RoomUtils roomUtils) {
+    public RoomServiceImpl(RoomRepository roomRepository,IHotelService hotelService, RoomUtils roomUtils) {
         this.roomRepository = roomRepository;
         this.hotelService = hotelService;
         this.roomUtils = roomUtils;

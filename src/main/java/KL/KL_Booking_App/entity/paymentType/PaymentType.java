@@ -4,5 +4,4 @@ public enum PaymentType {
     PENDING,
     COMPLETE,
     FAILED,
-
 }

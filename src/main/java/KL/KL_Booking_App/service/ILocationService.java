@@ -6,6 +6,6 @@ public interface ILocationService {
     LocationDto get(Long locationId);
     LocationDto save(Long hotelId, LocationDto locationDto);
     LocationDto update(Long hotelId, LocationDto locationDto);
-
     LocationDto convertLatLongToAddress(LocationDto locationDto);
+    LocationDto convertAddressToLatLong(LocationDto locationDto);
 }

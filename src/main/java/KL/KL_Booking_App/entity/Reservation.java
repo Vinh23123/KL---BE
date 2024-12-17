@@ -10,6 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Entity
@@ -43,33 +44,54 @@ public class Reservation {
     @Column(name = "updatedAt",insertable = false)
     private Timestamp updatedAt;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "discount_id", referencedColumnName = "discountId")
-//    @JsonManagedReference
     @JsonIgnore
     private Discount discount;
 
-    @OneToMany(mappedBy = "reservation")
+    @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL)
 //    @JsonBackReference
     private List<ReservationRoom> reservationRoom;
 
     @OneToMany(mappedBy = "reservation")
     private List<Payment> payment;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public Reservation() {
     }
 
-    public Reservation(Long reservationId, ReservationType reservationType, LocalDateTime date, LocalDateTime checkIn, LocalDateTime checkOut, Timestamp createdAt, double totalAmount, Timestamp updatedAt, Discount discount, List<ReservationRoom>  reservationRoom ) {
+    public Reservation(Long reservationId, ReservationType reservationType, LocalDateTime date, LocalDateTime checkIn, LocalDateTime checkOut, double totalAmount, Timestamp createdAt, Timestamp updatedAt, Discount discount, List<ReservationRoom> reservationRoom, List<Payment> payment, User user) {
         this.reservationId = reservationId;
         this.reservationType = reservationType;
         this.date = date;
         this.checkIn = checkIn;
         this.checkOut = checkOut;
-        this.createdAt = createdAt;
         this.totalAmount = totalAmount;
+        this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.discount = discount;
         this.reservationRoom = reservationRoom;
+        this.payment = payment;
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public List<Payment> getPayment() {
+        return payment;
+    }
+
+    public void setPayment(List<Payment> payment) {
+        this.payment = payment;
     }
 
     public Long getReservationId() {

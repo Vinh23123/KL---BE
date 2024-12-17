@@ -38,6 +38,8 @@ public class RoomDto {
     @NotBlank(message = "ViewType must not be blank.")
     private ViewType viewType;
 
+    private double pricePerNight;
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Hotel hotel;
 
@@ -53,7 +55,7 @@ public class RoomDto {
     public RoomDto() {
     }
 
-    public RoomDto(Long roomId, int roomNumber, String description, int capacity, double price, RoomType status, ViewType viewType, Hotel hotel, List<RoomImageDto> roomImageDtos, List<ReservationRoom> reservationRoom, List<Review> reviews) {
+    public RoomDto(Long roomId, int roomNumber, String description, int capacity, double price, RoomType status, ViewType viewType, double pricePerNight, Hotel hotel, List<RoomImageDto> roomImageDtos, List<ReservationRoom> reservationRoom, List<Review> reviews) {
         this.roomId = roomId;
         this.roomNumber = roomNumber;
         this.description = description;
@@ -61,10 +63,19 @@ public class RoomDto {
         this.price = price;
         this.status = status;
         this.viewType = viewType;
+        this.pricePerNight = pricePerNight;
         this.hotel = hotel;
         this.roomImageDtos = roomImageDtos;
         this.reservationRoom = reservationRoom;
         this.reviews = reviews;
+    }
+
+    public double getPricePerNight() {
+        return pricePerNight;
+    }
+
+    public void setPricePerNight(double pricePerNight) {
+        this.pricePerNight = pricePerNight;
     }
 
     public Long getRoomId() {

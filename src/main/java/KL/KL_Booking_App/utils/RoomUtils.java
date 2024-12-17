@@ -22,6 +22,8 @@ public class RoomUtils {
                 .capacity(roomDto.getCapacity())
                 .status(roomDto.getStatus())
                 .viewType(roomDto.getViewType())
+                .reviews(roomDto.getReviews())
+                .pricePerNight(roomDto.getPricePerNight())
                 .build();
     }
     public RoomDto mapToRoomDto(Room room){
@@ -33,6 +35,8 @@ public class RoomUtils {
                 .status(room.getStatus())
                 .viewType(room.getViewType())
                 .roomImageDtos(room.getRoomImage().stream().map(roomImageUtils::mapRoomImageToDto).toList())
+                .reviews(room.getReviews())
+                .pricePerNight(room.getPricePerNight())
                 .build();
     }
 }

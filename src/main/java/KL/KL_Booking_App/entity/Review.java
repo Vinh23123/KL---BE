@@ -1,7 +1,9 @@
 package KL.KL_Booking_App.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Builder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -10,6 +12,7 @@ import java.time.LocalDateTime;
 
 @Table(name = "Review")
 @Entity
+@Builder
 public class Review {
 
     @Id
@@ -23,7 +26,8 @@ public class Review {
 
     private String comment;
 
-    @Column(name = "reviewDate")
+    @CreationTimestamp
+    @Column(name = "reviewDate", updatable = false)
     private LocalDateTime reviewDate;
 
     @CreationTimestamp
@@ -36,7 +40,7 @@ public class Review {
 
     @ManyToOne
     @JoinColumn(name = "room_id")
-//    @JsonBackReference
+    @JsonIgnore
     private Room room;
 
     public Review() {
