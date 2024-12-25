@@ -16,6 +16,7 @@ import java.util.Date;
 
 @RestController
 @RequestMapping("api/v1")
+@CrossOrigin(origins = "http://localhost:5173")
 public class HotelController {
 
     private final IHotelService hotelService;
@@ -24,14 +25,14 @@ public class HotelController {
         this.hotelService = hotelService;
     }
 
-    @GetMapping(HotelApi.HOTEL_BY_ID)
-    public ResponseEntity<Response> fetchHotelById(@PathVariable(value = "hotelId") Long hotelId){
+    @GetMapping("/user" + HotelApi.HOTELS)
+    public ResponseEntity<Response> fetchHotelById(){
         try {
-            Hotel hotel = hotelService.findHotelById(hotelId);
+            HotelDto hotelDto = hotelService.fetchCurrentHotel();
             return new ResponseEntity<>(
                     Response.builder()
                             .status(Global.STATUS_SUCCESS)
-                            .data(hotel)
+                            .data(hotelDto)
                             .message(Global.MESSAGE_GET_SUCCESSFULLY)
                             .time(new SimpleDateFormat("dd-MM-yyyy").format(new Date()))
                             .build(),

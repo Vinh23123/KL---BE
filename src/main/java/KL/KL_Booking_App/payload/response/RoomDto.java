@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
 import java.util.List;
@@ -19,25 +20,26 @@ public class RoomDto {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Long roomId;
 
-    @NotBlank(message = "Room Number must not be blank.")
+    @NotNull(message = "Room Number must not be blank.")
     private int roomNumber;
 
+    @Size(max = 1200, message = "The description can not be larger than 1200 characters")
     private String description;
 
-    @NotBlank(message = "Capacity must not be blank.")
+    @NotNull(message = "Capacity must not be blank.")
     private int capacity;
 
-    @NotBlank(message = "Price must not be blank.")
-    @NotNull(message = "Price must not be null")
+    @NotNull(message = "Price must not be blank.")
     private double price;
 
 
-    @NotBlank(message = "Status must not be blank.")
+    @NotNull(message = "Status must not be blank.")
     private RoomType status;
 
-    @NotBlank(message = "ViewType must not be blank.")
+    @NotNull(message = "ViewType must not be blank.")
     private ViewType viewType;
 
+    @NotNull(message = "Price Per Night must not be blank.")
     private double pricePerNight;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)

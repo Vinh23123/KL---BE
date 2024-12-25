@@ -3,6 +3,7 @@ package KL.KL_Booking_App.payload.response;
 import KL.KL_Booking_App.entity.Discount;
 import KL.KL_Booking_App.entity.Payment;
     import KL.KL_Booking_App.entity.ReservationRoom;
+import KL.KL_Booking_App.entity.Room;
 import KL.KL_Booking_App.entity.reservationType.ReservationType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.FutureOrPresent;
@@ -38,7 +39,10 @@ public class ReservationDto {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<Payment> payment;
 
-    public ReservationDto(Long reservationId, ReservationType reservationType, LocalDateTime checkIn, LocalDateTime checkOut, double totalAmount, Discount discount, List<ReservationRoom> reservationRoom, List<Payment> payment) {
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private List<RoomDto> rooms;
+
+    public ReservationDto(Long reservationId, ReservationType reservationType, LocalDateTime checkIn, LocalDateTime checkOut, double totalAmount, Discount discount, List<ReservationRoom> reservationRoom, List<Payment> payment, List<RoomDto> rooms) {
         this.reservationId = reservationId;
         this.reservationType = reservationType;
         this.checkIn = checkIn;
@@ -47,6 +51,15 @@ public class ReservationDto {
         this.discount = discount;
         this.reservationRoom = reservationRoom;
         this.payment = payment;
+        this.rooms = rooms;
+    }
+
+    public List<RoomDto> getRooms() {
+        return rooms;
+    }
+
+    public void setRooms(List<RoomDto> rooms) {
+        this.rooms = rooms;
     }
 
     public Long getReservationId() {

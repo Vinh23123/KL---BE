@@ -4,11 +4,13 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.Builder;
 
 import java.util.List;
 
 @Entity
 @Table(name = "ReservationRoom")
+@Builder
 public class ReservationRoom {
 
     @Id
@@ -22,7 +24,6 @@ public class ReservationRoom {
 
     @ManyToOne
     @JoinColumn(name = "room_id", referencedColumnName = "roomId", nullable = true)
-    @JsonIgnore
     private Room room;
 
     public ReservationRoom() {

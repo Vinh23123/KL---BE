@@ -4,6 +4,8 @@ import KL.KL_Booking_App.entity.Reservation;
 import KL.KL_Booking_App.entity.paymentType.PaymentMethod;
 import KL.KL_Booking_App.entity.paymentType.PaymentType;
 import lombok.Builder;
+
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Builder
@@ -20,6 +22,8 @@ public class PaymentDto {
 
     private LocalDateTime paymentDate;
 
+    private Timestamp updatedAt;
+
     private PaymentType paymentStatus;
 
     private PaymentMethod paymentMethod;
@@ -29,16 +33,25 @@ public class PaymentDto {
     public PaymentDto() {
     }
 
-    public PaymentDto(Long paymentId, String amount, String orderInfo, String transactionId, String paymentUrl, LocalDateTime paymentDate, PaymentType paymentStatus, PaymentMethod paymentMethod, Reservation reservation) {
+    public PaymentDto(Long paymentId, String amount, String orderInfo, String transactionId, String paymentUrl, LocalDateTime paymentDate, Timestamp updatedAt, PaymentType paymentStatus, PaymentMethod paymentMethod, Reservation reservation) {
         this.paymentId = paymentId;
         this.amount = amount;
         this.orderInfo = orderInfo;
         this.transactionId = transactionId;
         this.paymentUrl = paymentUrl;
         this.paymentDate = paymentDate;
+        this.updatedAt = updatedAt;
         this.paymentStatus = paymentStatus;
         this.paymentMethod = paymentMethod;
         this.reservation = reservation;
+    }
+
+    public Timestamp getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public Long getPaymentId() {

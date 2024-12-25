@@ -15,7 +15,7 @@ public class HotelDto {
     @NotBlank(message = "Hotel Name must not be empty")
     private String hotelName;
 
-    @NotBlank(message = "Phone number must not be blank.")
+//    @NotBlank(message = "Phone number must not be blank.")
     @Pattern(regexp = "^\\d{10}$", message = "Phone number must be exactly 10 digits.")
     private String phoneNumber;
 

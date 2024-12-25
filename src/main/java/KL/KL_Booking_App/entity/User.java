@@ -1,5 +1,6 @@
 package KL.KL_Booking_App.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -21,19 +22,46 @@ public class User {
     private String mail;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<Reservation> reservations;
 
-    @OneToMany(mappedBy = "user")
-    private List<Hotel> hotels;
 
-    public User(long userId, String firstName, String lastName, String phone, String mail, List<Reservation> reservations, List<Hotel> hotels) {
+    @OneToOne(mappedBy = "user")
+    private Hotel hotel;
+
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<Review> reviews;
+
+
+    public User() {
+    }
+
+    public User(long userId, String firstName, String lastName, String phone, String mail, List<Reservation> reservations, Hotel hotel, List<Review> reviews) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
         this.mail = mail;
         this.reservations = reservations;
-        this.hotels = hotels;
+        this.hotel = hotel;
+        this.reviews = reviews;
+    }
+
+    public Hotel getHotel() {
+        return hotel;
+    }
+
+    public void setHotel(Hotel hotel) {
+        this.hotel = hotel;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
     }
 
     public long getUserId() {
@@ -82,13 +110,5 @@ public class User {
 
     public void setReservations(List<Reservation> reservations) {
         this.reservations = reservations;
-    }
-
-    public List<Hotel> getHotels() {
-        return hotels;
-    }
-
-    public void setHotels(List<Hotel> hotels) {
-        this.hotels = hotels;
     }
 }

@@ -13,6 +13,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("api/v1")
+@CrossOrigin(origins = "http://localhost:5173")
 public class PaymentController {
 
     private final IPaymentService paymentService;
@@ -22,7 +23,7 @@ public class PaymentController {
     }
 
     @GetMapping("reservations/{reservationId}/payments/create")
-    public ResponseEntity<?> createPayment(@PathVariable(value = "reservationId") Long reservationId) throws UnsupportedEncodingException {
+    public ResponseEntity<Response> createPayment(@PathVariable(value = "reservationId") Long reservationId) throws UnsupportedEncodingException {
         PaymentDto paymentDto = paymentService.createPayment(reservationId);
         return new ResponseEntity<>(Response.builder()
                 .status(Global.STATUS_SUCCESS)
@@ -32,11 +33,9 @@ public class PaymentController {
                 .build(), HttpStatus.OK);
     }
 
-    @GetMapping("reservations/{reservationId}/payments/{paymentId}/return")
-    public ResponseEntity<?> handlePaymentReturn(@PathVariable(value = "reservationId") Long reservationId,
-                                                 @PathVariable(value = "paymentId") Long paymentId,
-                                                 @RequestParam Map<String, String> vnpayParams) {
-        PaymentDto paymentDto = paymentService.handlePaymentReturn(reservationId, paymentId, vnpayParams);
+    @PostMapping("payment/return")
+    public ResponseEntity<Response> handlePaymentReturn(@RequestBody Map<String, String> vnpayParams) {
+        PaymentDto paymentDto = paymentService.handlePaymentReturn(vnpayParams);
         return new ResponseEntity<>(Response.builder()
                 .status(Global.STATUS_SUCCESS)
                 .message(Global.MESSAGE_GET_SUCCESSFULLY)

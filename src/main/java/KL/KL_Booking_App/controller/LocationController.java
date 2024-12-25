@@ -18,6 +18,7 @@ import java.util.Date;
 
 @RestController
 @RequestMapping("api/v1")
+@CrossOrigin(origins = "http://localhost:5173")
 public class LocationController {
 
     private static final Logger log = LoggerFactory.getLogger(LocationController.class);
@@ -69,7 +70,7 @@ public class LocationController {
         }
     }
 
-    @GetMapping(LocationApi.LOCATIONS + "/convert-location")
+    @PostMapping(LocationApi.LOCATIONS + "/convert-location")
     public ResponseEntity<Response> convertLocationToAddress(@Valid @RequestBody LocationDto locationDto){
 
         try {
@@ -90,7 +91,7 @@ public class LocationController {
         }
     }
 
-    @GetMapping(LocationApi.LOCATIONS + "/convert-location-address")
+    @PostMapping(LocationApi.LOCATIONS + "/convert-location-address")
     public ResponseEntity<Response> convertAddressLocationTo(@Valid @RequestBody LocationDto locationDto){
 
         try {

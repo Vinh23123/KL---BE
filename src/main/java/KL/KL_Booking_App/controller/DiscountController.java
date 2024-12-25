@@ -6,8 +6,8 @@ import KL.KL_Booking_App.payload.response.Response;
 import KL.KL_Booking_App.service.IDiscountService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1")
+@CrossOrigin(origins = "http://localhost:5173")
 public class DiscountController {
 
     private final IDiscountService discountService;
@@ -26,7 +27,7 @@ public class DiscountController {
     }
 
     @GetMapping("/discounts")
-    public ResponseEntity<Response> fetchAllRoomsByHotelId(@PathVariable(value = "hotelId") Long hotelId){
+    public ResponseEntity<Response> fetchAllDiscounts(){
         List<DiscountDto> discountsDto = discountService.getAllDiscounts();
         return new ResponseEntity<>(
                 Response.builder()

@@ -34,9 +34,10 @@ public class RoomUtils {
                 .capacity(room.getCapacity())
                 .status(room.getStatus())
                 .viewType(room.getViewType())
-                .roomImageDtos(room.getRoomImage().stream().map(roomImageUtils::mapRoomImageToDto).toList())
-                .reviews(room.getReviews())
                 .pricePerNight(room.getPricePerNight())
+                .reviews(room.getReviews())
+                .roomImageDtos(room.getRoomImage().stream().map(roomImageUtils::mapRoomImageToDto).toList())
+                .hotel(room.getHotel())
                 .build();
     }
 }

@@ -1,10 +1,14 @@
 package KL.KL_Booking_App.controller;
 
 import KL.KL_Booking_App.constants.Global;
+import KL.KL_Booking_App.entity.Reservation;
 import KL.KL_Booking_App.payload.response.ReservationDto;
 import KL.KL_Booking_App.payload.response.Response;
 import KL.KL_Booking_App.service.IReservationService;
+import KL.KL_Booking_App.utils.ReservationUtils;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,18 +19,24 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1")
+@CrossOrigin(origins = "http://localhost:5173")
 public class ReservationController {
 
+    private static final Logger log = LoggerFactory.getLogger(ReservationController.class);
     private final IReservationService reservationService;
+    private final ReservationUtils reservationUtils;
 
-    public ReservationController(IReservationService reservationService) {
+    public ReservationController(IReservationService reservationService, ReservationUtils reservationUtils) {
         this.reservationService = reservationService;
+        this.reservationUtils = reservationUtils;
     }
 
     @PostMapping("/reservations/rooms/{roomId}/discounts/{discountId}")
     public ResponseEntity<Response> createReservation(@PathVariable(value = "roomId")Long roomId,
                                                       @PathVariable(value = "discountId")Long discountId,
                                                       @Valid @RequestBody ReservationDto reservationDto){
+        log.info("Room ID: {}, Discount ID: {}", roomId, discountId);
+        log.info("Request Body: {}", reservationDto);
       try {
           ReservationDto savedReservation = reservationService.createReservation(roomId, discountId, reservationDto);
           return new ResponseEntity<>(
@@ -38,6 +48,7 @@ public class ReservationController {
                           .build(),
                   HttpStatus.OK);
       } catch (Exception e){
+          log.info(e.getMessage());
           return new ResponseEntity<>(
                   Response.builder()
                           .status(Global.STATUS_FAILED)
@@ -109,5 +120,19 @@ public class ReservationController {
                     HttpStatus.BAD_REQUEST
             );
         }
+    }
+
+    @GetMapping("/reservations/{reservationId}")
+    public ResponseEntity<Response> getReservationById(@PathVariable(value = "reservationId") Long reservationId ){
+        Reservation reservation = reservationService.getReservationById(reservationId);
+        ReservationDto reservationDto = reservationUtils.mapToReservationDto(reservation);
+        return new ResponseEntity<>(
+                Response.builder()
+                        .status(Global.STATUS_SUCCESS)
+                        .data(reservationDto)
+                        .message(Global.MESSAGE_GET_SUCCESSFULLY)
+                        .time(new SimpleDateFormat("dd-MM-yyyy").format(new Date()))
+                        .build()
+                , HttpStatus.OK);
     }
 }

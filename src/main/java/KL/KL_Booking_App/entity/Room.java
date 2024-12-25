@@ -23,6 +23,7 @@ public class Room {
     @Column(name = "roomNumber")
     private int roomNumber;
 
+    @Lob
     private String description;
 
     private int capacity;

@@ -28,6 +28,7 @@ public class HotelServiceImpl implements IHotelService {
 
     @Override
     public Hotel findHotelById(Long hotelId) {
+
         return hotelRepository.findById(hotelId).orElseThrow(() -> new ResourceNotFoundException("Hotel", "Id", hotelId));
     }
 
@@ -43,6 +44,11 @@ public class HotelServiceImpl implements IHotelService {
     @Override
     public HotelDto save(HotelDto hotelDto) {
         // retrieve current user id to add hotel
+        // retrieve current id user -> get all reservations
+        // Fake user id 1
+        long userId = 1;
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
+
         Hotel hotel =  hotelUtils.mapToEntity(hotelDto);
         Hotel savedhotel = hotelRepository.save(hotel);
         return hotelUtils.mapToDto(savedhotel);
@@ -64,6 +70,14 @@ public class HotelServiceImpl implements IHotelService {
 
         Hotel updatedhotel = hotelRepository.save(hotel);
         return hotelUtils.mapToDto(updatedhotel);
+    }
+
+    @Override
+    public HotelDto fetchCurrentHotel() {
+        long userId = 1;
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
+        Hotel hotel = user.getHotel();
+        return hotelUtils.mapToDto(hotel);
     }
 
 

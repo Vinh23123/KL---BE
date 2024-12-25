@@ -5,6 +5,7 @@ import KL.KL_Booking_App.entity.reservationType.ReservationType;
 import KL.KL_Booking_App.entity.roomType.RoomType;
 import KL.KL_Booking_App.exeption.ResourceNotFoundException;
 import KL.KL_Booking_App.payload.response.ReservationDto;
+import KL.KL_Booking_App.payload.response.RoomDto;
 import KL.KL_Booking_App.repository.ReservationRepository;
 import KL.KL_Booking_App.repository.ReservationRoomRepository;
 import KL.KL_Booking_App.repository.RoomRepository;
@@ -33,6 +34,7 @@ public class ReservationServiceImpl implements IReservationService {
 
     private final UserRepository userRepository;
 
+
     public ReservationServiceImpl(IDiscountService discountService, ReservationRepository reservationRepository, ReservationRoomRepository reservationRoomRepository, RoomRepository roomRepository, UserRepository userRepository) {
         this.discountService = discountService;
         this.reservationRepository = reservationRepository;
@@ -48,11 +50,10 @@ public class ReservationServiceImpl implements IReservationService {
             throw new IllegalArgumentException("Check In Date should be less than check out date");
         }
         // get room dto
-        Room room = roomRepository.findById(roomId).orElseThrow(() -> new ResourceNotFoundException("Room", "Id", roomId));
+                Room room = roomRepository.findById(roomId).orElseThrow(() -> new ResourceNotFoundException("Room", "Id", roomId));
         if (room.getStatus().equals(RoomType.UNAVAILABLE)) {
             throw new IllegalArgumentException("Room is already booked");
         }
-
         Reservation reservation = new Reservation();
         reservation.setReservationType(ReservationType.PENDING);
 
@@ -67,18 +68,22 @@ public class ReservationServiceImpl implements IReservationService {
         reservation.setCheckOut(reservationDto.getCheckOut());
         reservation.setTotalAmount(finalTotal);
         reservation.setDiscount(discount);
+        // retrieve current user id in security to add reservation
+        // FAKE user : NOTE
+        long userId = 1;
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
+        reservation.setUser(user);
+
 
         ReservationRoom reservationRoom = new ReservationRoom();
         reservationRoom.setReservation(reservation);
         reservationRoom.setRoom(room);
 
-        // retrieve current user id in security to add reservation
-        // FAKE user : NOTE
-
         reservationRepository.save(reservation);
         reservationRoomRepository.save(reservationRoom);
+//        roomRepository.save(room);
 
-        return mapToReservationDto(reservation);
+        return mapToReservationDtoTest(reservation);
     }
 
     @Override
@@ -86,6 +91,7 @@ public class ReservationServiceImpl implements IReservationService {
         return reservationRepository.findById(reservationId).orElseThrow(()-> new ResourceNotFoundException("Reservation", "Id", reservationId));
     }
 
+    @Transactional
     @Override
     public void deleteReservation(Long reservationId) {
         Reservation reservation = getReservationById(reservationId);
@@ -111,11 +117,8 @@ public class ReservationServiceImpl implements IReservationService {
         }
         // get room dto
         Room room = roomRepository.findById(roomId).orElseThrow(() -> new ResourceNotFoundException("Room", "Id", roomId));
-        if (room.getStatus().equals(RoomType.UNAVAILABLE)) {
-            throw new IllegalArgumentException("Room is already booked");
-        }
-        Reservation reservation = getReservationById(reservationDto.getReservationId());
 
+        Reservation reservation = getReservationById(reservationDto.getReservationId());
         // apply discount
         double total  = calculateTotalCost(reservationDto, room);
         Discount discount = discountService.getDiscountById(discountId);
@@ -159,11 +162,47 @@ public class ReservationServiceImpl implements IReservationService {
     private ReservationDto mapToReservationDto(Reservation reservation){
         return ReservationDto
                 .builder()
+                .reservationId(reservation.getReservationId())
+                .reservationType(reservation.getReservationType())
                 .checkIn(reservation.getCheckIn())
                 .checkOut(reservation.getCheckOut())
                 .totalAmount(reservation.getTotalAmount())
+                .payment(reservation.getPayment())
+                .rooms(reservation.getReservationRoom().stream().map(room -> mapToRoomDto(room.getRoom())).collect(Collectors.toList()))
                 .build();
     }
+
+    private ReservationDto mapToReservationDtoTest(Reservation reservation){
+        return ReservationDto
+                .builder()
+                .reservationId(reservation.getReservationId())
+                .reservationType(reservation.getReservationType())
+                .checkIn(reservation.getCheckIn())
+                .checkOut(reservation.getCheckOut())
+                .totalAmount(reservation.getTotalAmount())
+                .payment(reservation.getPayment())
+                .build();
+    }
+
+    private RoomDto mapToRoomDto(Room room){
+        return RoomDto.builder()
+                .roomId(room.getRoomId())
+                .roomNumber(room.getRoomNumber())
+                .description(room.getDescription())
+                .capacity(room.getCapacity())
+                .status(room.getStatus())
+                .viewType(room.getViewType())
+                .pricePerNight(room.getPricePerNight())
+                .hotel(room.getHotel())
+                .build();
+    }
+
+//    private List<Room> mapRoom(List<ReservationRoom> reservationRooms){
+//        return ReservationRoom
+//                .builder()
+//                .room(reservationRooms.stream().map(reservationRoom -> reservationRoom.getRoom()))
+//                .build();
+//    }
 }
 
 // create reservation -> call api for reservation -> if payment method is credit card -> call api for payment -> UI redirect to url in call api -> payment -> depend on response ->  redirect user

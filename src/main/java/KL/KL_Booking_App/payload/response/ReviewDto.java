@@ -1,8 +1,10 @@
 package KL.KL_Booking_App.payload.response;
 import KL.KL_Booking_App.entity.Room;
+import KL.KL_Booking_App.entity.User;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
@@ -18,23 +20,34 @@ public class ReviewDto {
 
     private String title;
 
+    @Size(max = 1200, message = "The Comment can not be larger than 1200 characters")
     private String comment;
-
-    private LocalDateTime reviewDate;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Room room;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private User user;
+
+
     public ReviewDto() {
     }
 
-    public ReviewDto(Long reviewId, int rating, String title, String comment, LocalDateTime reviewDate, Room room) {
+    public ReviewDto(Long reviewId, int rating, String title, String comment, Room room, User user) {
         this.reviewId = reviewId;
         this.rating = rating;
         this.title = title;
         this.comment = comment;
-        this.reviewDate = reviewDate;
         this.room = room;
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Long getReviewId() {
@@ -69,13 +82,6 @@ public class ReviewDto {
         this.comment = comment;
     }
 
-    public LocalDateTime getReviewDate() {
-        return reviewDate;
-    }
-
-    public void setReviewDate(LocalDateTime reviewDate) {
-        this.reviewDate = reviewDate;
-    }
 
     public Room getRoom() {
         return room;

@@ -20,6 +20,7 @@ import java.util.List;
 
 @RequestMapping("/api/v1")
 @RestController
+@CrossOrigin(origins = "http://localhost:5173")
 public class RoomController {
     private static final Logger log = LoggerFactory.getLogger(RoomController.class);
 
@@ -139,5 +140,18 @@ public class RoomController {
                             .build()
                     ,HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping(RoomApi.ROOMS)
+    public ResponseEntity<Response> fetchAllRooms(){
+        List<RoomDto> roomDtos = roomService.getAllRooms();
+        return new ResponseEntity<>(
+                Response.builder()
+                        .status(Global.STATUS_SUCCESS)
+                        .data(roomDtos)
+                        .message(Global.MESSAGE_GET_SUCCESSFULLY)
+                        .time(new SimpleDateFormat("dd-MM-yyyy").format(new Date()))
+                        .build()
+                , HttpStatus.OK);
     }
 }

@@ -2,6 +2,7 @@ package KL.KL_Booking_App.entity;
 
 import KL.KL_Booking_App.entity.paymentType.PaymentMethod;
 import KL.KL_Booking_App.entity.paymentType.PaymentType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -38,18 +39,21 @@ public class Payment {
     @Column(name = "createdAt",updatable = false)
     private Timestamp createdAt;
 
+    private String vnpTransactionRef;
+
     @UpdateTimestamp
     @Column(name = "updatedAt",insertable = false)
     private Timestamp updatedAt;
 
     @ManyToOne
     @JoinColumn(name = "reservation_id")
+    @JsonIgnore
     private Reservation reservation;
 
     public Payment() {
     }
 
-    public Payment(Long paymentId, String amount, String orderInfo, String transactionId, LocalDateTime paymentDate, PaymentType paymentStatus, PaymentMethod paymentMethod, Timestamp createdAt, Timestamp updatedAt, Reservation reservation) {
+    public Payment(Long paymentId, String amount, String orderInfo, String transactionId, LocalDateTime paymentDate, PaymentType paymentStatus, PaymentMethod paymentMethod, Timestamp createdAt, String vnpTransactionRef, Timestamp updatedAt, Reservation reservation) {
         this.paymentId = paymentId;
         this.amount = amount;
         this.orderInfo = orderInfo;
@@ -58,8 +62,17 @@ public class Payment {
         this.paymentStatus = paymentStatus;
         this.paymentMethod = paymentMethod;
         this.createdAt = createdAt;
+        this.vnpTransactionRef = vnpTransactionRef;
         this.updatedAt = updatedAt;
         this.reservation = reservation;
+    }
+
+    public String getVnpTransactionRef() {
+        return vnpTransactionRef;
+    }
+
+    public void setVnpTransactionRef(String vnpTransactionRef) {
+        this.vnpTransactionRef = vnpTransactionRef;
     }
 
     public String getOrderInfo() {

@@ -45,13 +45,15 @@ public class Hotel {
     private Timestamp updatedAt;
 
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Room> rooms;
 
     @OneToOne(mappedBy = "hotel",cascade = CascadeType.ALL)
     private Location location;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
 

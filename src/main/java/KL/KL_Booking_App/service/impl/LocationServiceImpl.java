@@ -64,9 +64,12 @@ public class LocationServiceImpl implements ILocationService {
     public LocationDto update(Long hotelId ,LocationDto locationDto) {
         Location location = mapToEntity(locationDto);
         Hotel hotel = hotelService.findHotelById(hotelId);
+
         location.setLatitude(locationDto.getLatitude());
         location.setLongitude(locationDto.getLongitude());
+        location.setFormattedAddress(locationDto.getFormattedAddress());
         location.setHotel(hotel);
+
         locationRepository.save(location);
         return mapToDto(location);
     }
@@ -180,6 +183,7 @@ public class LocationServiceImpl implements ILocationService {
                 .locationId(location.getLocationId())
                 .latitude(location.getLatitude())
                 .longitude(location.getLongitude())
+                .formattedAddress(location.getFormattedAddress())
                 .build();
     }
 

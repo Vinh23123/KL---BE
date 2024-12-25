@@ -7,6 +7,6 @@ import java.util.Map;
 
 public interface IPaymentService {
     PaymentDto createPayment(Long reservationId) throws UnsupportedEncodingException;
-    PaymentDto handlePaymentReturn(Long reservationId,  Long paymentId,Map<String, String> vnpayParams);
-
+//    PaymentDto handlePaymentReturn(Long reservationId,  Long paymentId,Map<String, String> vnpayParams);
+PaymentDto handlePaymentReturn(Map<String, String> vnpayParams);
 }

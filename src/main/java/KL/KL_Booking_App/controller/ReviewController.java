@@ -18,6 +18,7 @@ import java.util.Date;
 
 @RestController
 @RequestMapping("api/v1")
+@CrossOrigin(origins = "http://localhost:5173")
 public class ReviewController {
 
     private static final Logger log = LoggerFactory.getLogger(ReviewController.class);
