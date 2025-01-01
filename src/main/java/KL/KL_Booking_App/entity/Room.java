@@ -53,15 +53,16 @@ public class Room {
     private Hotel hotel;
 
     // orphanRemoval = true -> delete orphaned entities from the database.
+//    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     @Column(name = "roomImage")
     private List<RoomImage> roomImage;
 
-    @OneToMany(mappedBy = "room")
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<ReservationRoom> reservationRoom;
 
-    @OneToMany(mappedBy = "room")
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews;
 
     public Room() {

@@ -52,7 +52,7 @@ public class Hotel {
     private Location location;
 
     @OneToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnore
     private User user;
 

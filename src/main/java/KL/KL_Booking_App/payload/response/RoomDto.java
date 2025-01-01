@@ -20,26 +20,25 @@ public class RoomDto {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Long roomId;
 
-    @NotNull(message = "Room Number must not be blank.")
+    @NotNull(message = "Room Number must not be null.")
     private int roomNumber;
 
     @Size(max = 1200, message = "The description can not be larger than 1200 characters")
     private String description;
 
-    @NotNull(message = "Capacity must not be blank.")
+    @NotNull(message = "Capacity must not be null.")
     private int capacity;
 
-    @NotNull(message = "Price must not be blank.")
     private double price;
 
 
-    @NotNull(message = "Status must not be blank.")
+    @NotNull(message = "Status must not be null.")
     private RoomType status;
 
-    @NotNull(message = "ViewType must not be blank.")
+    @NotNull(message = "ViewType must not be null.")
     private ViewType viewType;
 
-    @NotNull(message = "Price Per Night must not be blank.")
+    @NotNull(message = "Price Per Night must not be null.")
     private double pricePerNight;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)

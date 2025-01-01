@@ -23,7 +23,7 @@ public class ReservationRoom {
     private Reservation reservation;
 
     @ManyToOne
-    @JoinColumn(name = "room_id", referencedColumnName = "roomId", nullable = true)
+    @JoinColumn(name = "room_id", referencedColumnName = "roomId", nullable = false)
     private Room room;
 
     public ReservationRoom() {

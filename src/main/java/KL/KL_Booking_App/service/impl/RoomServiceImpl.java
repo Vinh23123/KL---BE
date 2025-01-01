@@ -8,6 +8,7 @@ import KL.KL_Booking_App.entity.roomType.RoomType;
 import KL.KL_Booking_App.exeption.ResourceNotFoundException;
 import KL.KL_Booking_App.payload.response.RoomDto;
 import KL.KL_Booking_App.payload.response.RoomImageDto;
+import KL.KL_Booking_App.payload.response.RoomResponse;
 import KL.KL_Booking_App.repository.LocationRepository;
 import KL.KL_Booking_App.repository.RoomRepository;
 import KL.KL_Booking_App.service.IHotelService;
@@ -15,6 +16,10 @@ import KL.KL_Booking_App.service.IReservationService;
 import KL.KL_Booking_App.service.IRoomService;
 import KL.KL_Booking_App.utils.RoomUtils;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -50,9 +55,25 @@ public class RoomServiceImpl implements IRoomService {
     }
 
     @Override
-    public List<RoomDto> getAllRoomsByHotelId(Long hotelId) {
-        List<Room> rooms = roomRepository.findByHotelHotelId(hotelId);
-        return rooms.stream().map(roomUtils::mapToRoomDto).toList();
+    public RoomResponse getAllRoomsByHotelId(Long hotelId, int pageNo, int pageSize, String sortBy, String sortDir) {
+
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort. by(sortBy).descending();
+
+        // create Pageable instance
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+        Page<Room> rooms = roomRepository.findByHotelHotelId(hotelId, pageable);
+        List<Room> roomList = rooms.getContent();
+        List<RoomDto> roomDtos = roomList.stream().map(roomUtils::mapToRoomDto).toList();
+
+        return RoomResponse
+                .builder()
+                .content(roomDtos)
+                .pageNo(rooms.getNumber())
+                .pageSize(rooms.getSize())
+                .totalElements(rooms.getTotalElements())
+                .totalPages(rooms.getTotalPages())
+                .last(rooms.isLast())
+                .build();
     }
 
     @Override
@@ -70,14 +91,15 @@ public class RoomServiceImpl implements IRoomService {
                 .roomNumber(roomDto.getRoomNumber())
                 .description(roomDto.getDescription())
                 .capacity(roomDto.getCapacity())
-                .status(RoomType.AVAILABLE)
+                .status(roomDto.getStatus())
+                .pricePerNight(roomDto.getPricePerNight())
                 .viewType(roomDto.getViewType())
                 .hotel(hotel)
                 .build();
         // save a room
         roomRepository.save(room);
 
-        return roomUtils.mapToRoomDto(room);
+        return mapToRoomDto(room);
     }
 
     @Override
@@ -100,6 +122,20 @@ public class RoomServiceImpl implements IRoomService {
     public void deleteRoomById(Long roomId) {
         Room room = roomRepository.findById(roomId).orElseThrow(() -> new ResourceNotFoundException("Room", "Id", roomId));
         roomRepository.delete(room);
+    }
+
+    private RoomDto mapToRoomDto(Room room){
+        return RoomDto.builder()
+                .roomId(room.getRoomId())
+                .roomNumber(room.getRoomNumber())
+                .description(room.getDescription())
+                .capacity(room.getCapacity())
+                .status(room.getStatus())
+                .viewType(room.getViewType())
+                .pricePerNight(room.getPricePerNight())
+                .reviews(room.getReviews())
+                .hotel(room.getHotel())
+                .build();
     }
 
 }

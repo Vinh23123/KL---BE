@@ -49,14 +49,14 @@ public class Reservation {
     @JsonIgnore
     private Discount discount;
 
-    @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, orphanRemoval = true)
 //    @JsonBackReference
     private List<ReservationRoom> reservationRoom;
 
-    @OneToMany(mappedBy = "reservation")
+    @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Payment> payment;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST )
     @JoinColumn(name = "user_id")
     private User user;
 

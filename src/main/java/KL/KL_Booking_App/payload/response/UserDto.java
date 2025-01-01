@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
 @Builder
@@ -21,6 +22,7 @@ public class UserDto {
     @Email
     // not null, not an empty string, and does not consist entirely of whitespace.
     @NotBlank(message = "Email must not be blank")
+    @Size(max = 50)
     @Column(unique = true)
     private String mail;
 
