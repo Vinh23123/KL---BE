@@ -103,7 +103,7 @@ public class AuthController {
                     .badRequest()
                     .body(Response.builder()
                             .status(Global.STATUS_FAILED)
-                            .message(String.valueOf(new MessageResponse("Error: Username is already taken!")))
+                            .message("Error: Username is already taken!")
                             .time(new SimpleDateFormat("dd-MM-yyyy").format(new Date()))
                             .build());
         }
@@ -113,7 +113,7 @@ public class AuthController {
                     .badRequest()
                     .body(Response.builder()
                             .status(Global.STATUS_FAILED)
-                            .message(String.valueOf(new MessageResponse("Error: Email is already in use!")))
+                            .message("Error: Email is already in use!")
                             .time(new SimpleDateFormat("dd-MM-yyyy").format(new Date()))
                             .build());
         }
@@ -183,5 +183,18 @@ public class AuthController {
                             .build());
                 }).orElseThrow(() -> new TokenRefreshException(requestRefreshToken,
                         "Refresh token is not in database!"));
+    }
+
+    @PostMapping("/signout")
+    public ResponseEntity<Response> logoutUser() {
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = userDetails.getId();
+        refreshTokenService.deleteByUserId(userId);
+        return ResponseEntity.ok(Response
+                .builder()
+                        .status(Global.STATUS_SUCCESS)
+                        .message(Global.MESSAGE_SIGN_OUT_SUCCESSFULLY)
+                        .time(new SimpleDateFormat("dd-MM-yyyy").format(new Date()))
+                .build());
     }
 }

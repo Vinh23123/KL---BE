@@ -18,4 +18,6 @@ public interface IRoomService {
     RoomDto updateRoomById(RoomDto roomDto);
 
     void deleteRoomById(Long roomId);
+
+    void updateStatus(Long roomId);
 }

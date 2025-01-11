@@ -1,6 +1,7 @@
 package KL.KL_Booking_App.payload.response;
 
 import KL.KL_Booking_App.entity.Hotel;
+import KL.KL_Booking_App.entity.Reservation;
 import KL.KL_Booking_App.entity.ReservationRoom;
 import KL.KL_Booking_App.entity.Review;
 import KL.KL_Booking_App.entity.roomType.RoomType;
@@ -51,12 +52,15 @@ public class RoomDto {
     private List<ReservationRoom> reservationRoom;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    private List<ReservationDto> reservationList;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<Review> reviews;
 
     public RoomDto() {
     }
 
-    public RoomDto(Long roomId, int roomNumber, String description, int capacity, double price, RoomType status, ViewType viewType, double pricePerNight, Hotel hotel, List<RoomImageDto> roomImageDtos, List<ReservationRoom> reservationRoom, List<Review> reviews) {
+    public RoomDto(Long roomId, int roomNumber, String description, int capacity, double price, RoomType status, ViewType viewType, double pricePerNight, Hotel hotel, List<RoomImageDto> roomImageDtos, List<ReservationRoom> reservationRoom, List<ReservationDto> reservationList, List<Review> reviews) {
         this.roomId = roomId;
         this.roomNumber = roomNumber;
         this.description = description;
@@ -68,7 +72,16 @@ public class RoomDto {
         this.hotel = hotel;
         this.roomImageDtos = roomImageDtos;
         this.reservationRoom = reservationRoom;
+        this.reservationList = reservationList;
         this.reviews = reviews;
+    }
+
+    public List<ReservationDto> getReservationList() {
+        return reservationList;
+    }
+
+    public void setReservationList(List<ReservationDto> reservationList) {
+        this.reservationList = reservationList;
     }
 
     public double getPricePerNight() {

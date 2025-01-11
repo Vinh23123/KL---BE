@@ -140,13 +140,12 @@ public class VNPayService implements IPaymentService {
             payment.setPaymentStatus(PaymentType.COMPLETE);
 
             Reservation reservation = payment.getReservation();
-            reservation.setReservationType(ReservationType.CONFIRMED);
             reservationRepository.save(reservation);
-            List<Room> rooms = payment.getReservation().getReservationRoom().stream().map(ReservationRoom::getRoom).toList();
-            rooms.forEach(room -> {
-                room.setStatus(RoomType.UNAVAILABLE);
-                roomRepository.save(room);
-            });
+//            List<Room> rooms = payment.getReservation().getReservationRoom().stream().map(ReservationRoom::getRoom).toList();
+//            rooms.forEach(room -> {
+//                room.setStatus(RoomType.UNAVAILABLE);
+//                roomRepository.save(room);
+//            });
             paymentRepository.save(payment);
             return PaymentDto
                     .builder()

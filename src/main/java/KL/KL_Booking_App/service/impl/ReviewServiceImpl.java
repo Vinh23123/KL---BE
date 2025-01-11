@@ -4,12 +4,16 @@ import KL.KL_Booking_App.entity.Review;
 import KL.KL_Booking_App.entity.Room;
 import KL.KL_Booking_App.entity.User;
 import KL.KL_Booking_App.exeption.ResourceNotFoundException;
+import KL.KL_Booking_App.payload.request.RequestRating;
+import KL.KL_Booking_App.payload.request.RequestReview;
 import KL.KL_Booking_App.payload.response.ReviewDto;
 import KL.KL_Booking_App.repository.ReviewRepository;
 import KL.KL_Booking_App.repository.UserRepository;
 import KL.KL_Booking_App.service.IReviewService;
 import KL.KL_Booking_App.service.IRoomService;
+import KL.KL_Booking_App.service.sec.UserDetailsImpl;
 import KL.KL_Booking_App.utils.RoomUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -33,7 +37,7 @@ public class ReviewServiceImpl implements IReviewService {
     @Override
     public ReviewDto update(ReviewDto reviewDto) {
         Review review = findReviewById(reviewDto.getReviewId());
-        review.setRating(reviewDto.getRating());
+
         review.setTitle(reviewDto.getTitle());
         review.setComment(reviewDto.getComment());
 
@@ -43,17 +47,26 @@ public class ReviewServiceImpl implements IReviewService {
     }
 
     @Override
-    public ReviewDto save(Long RoomId, ReviewDto reviewDto) {
+    public ReviewDto updateRating(RequestRating reviewDto) {
+        Review review = findReviewById(reviewDto.getReviewId());
+        review.setRating(reviewDto.getRating());
+        Review savedReview = reviewRepository.save(review);
+
+        return  mapReviewToDto(savedReview);
+    }
+
+    @Override
+    public ReviewDto save(Long RoomId, RequestReview reviewDto) {
         Room room = roomUtils.mapToRoomEntity(roomService.getRoomById(RoomId));
 
         // will replace soon
-        Long userId = 1L;
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = userDetails.getId();
 
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
 
         Review review = Review
                 .builder()
-                .rating(reviewDto.getRating())
                 .title(reviewDto.getTitle())
                 .comment(reviewDto.getComment())
                 .room(room)

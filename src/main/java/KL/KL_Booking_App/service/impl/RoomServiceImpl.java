@@ -1,9 +1,6 @@
 package KL.KL_Booking_App.service.impl;
 
-import KL.KL_Booking_App.entity.Hotel;
-import KL.KL_Booking_App.entity.Location;
-import KL.KL_Booking_App.entity.Room;
-import KL.KL_Booking_App.entity.RoomImage;
+import KL.KL_Booking_App.entity.*;
 import KL.KL_Booking_App.entity.roomType.RoomType;
 import KL.KL_Booking_App.exeption.ResourceNotFoundException;
 import KL.KL_Booking_App.payload.response.RoomDto;
@@ -63,7 +60,7 @@ public class RoomServiceImpl implements IRoomService {
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
         Page<Room> rooms = roomRepository.findByHotelHotelId(hotelId, pageable);
         List<Room> roomList = rooms.getContent();
-        List<RoomDto> roomDtos = roomList.stream().map(roomUtils::mapToRoomDto).toList();
+        List<RoomDto> roomDtos = roomList.stream().map(roomUtils::mapToRoomDb).toList();
 
         return RoomResponse
                 .builder()
@@ -121,7 +118,18 @@ public class RoomServiceImpl implements IRoomService {
     @Override
     public void deleteRoomById(Long roomId) {
         Room room = roomRepository.findById(roomId).orElseThrow(() -> new ResourceNotFoundException("Room", "Id", roomId));
+        List<Reservation> reservationList = room.getReservationRoom().stream().map(ReservationRoom::getReservation).toList();
+        if (!reservationList.isEmpty()) {
+            throw new RuntimeException("Room is already reserved");
+        }
         roomRepository.delete(room);
+    }
+
+    @Override
+    public void updateStatus(Long roomId) {
+        Room room = roomRepository.findById(roomId).orElseThrow(() -> new ResourceNotFoundException("Room", "Id", roomId));
+        room.setStatus(RoomType.AVAILABLE);
+        roomRepository.save(room);
     }
 
     private RoomDto mapToRoomDto(Room room){

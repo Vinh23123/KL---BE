@@ -126,6 +126,30 @@ public class RoomController {
         }
     }
 
+    @PutMapping(RoomApi.ROOMS + "/{roomId}")
+    public ResponseEntity<Response> updateRoomStatus(@PathVariable(value = "roomId") Long roomId){
+        try {
+            // Call service to create a new room
+            roomService.updateStatus(roomId);
+            // Prepare successful response
+            return new ResponseEntity<>(
+                    Response.builder()
+                            .status(Global.STATUS_SUCCESS)
+                            .message(Global.MESSAGE_UPDATED_SUCCESSFULLY)
+                            .build()
+                    ,HttpStatus.CREATED);
+        } catch (Exception e) {
+            // Log the exception with error level
+            return new ResponseEntity<>(
+                    Response.builder()
+                            .status(Global.STATUS_FAILED)
+                            .message(e.getMessage())
+                            .time(new SimpleDateFormat("dd-MM-yyyy").format(new Date()))
+                            .build()
+                    , HttpStatus.NOT_FOUND);
+        }
+    }
+
     @DeleteMapping(RoomApi.ROOM_BY_ID)
     public ResponseEntity<Response> deleteRoomById(@PathVariable(value = "roomId") Long roomId){
         try{

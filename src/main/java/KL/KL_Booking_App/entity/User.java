@@ -28,8 +28,6 @@ public class User {
 
     private String phone;
 
-    @NotBlank
-    @Size(max = 20)
     private String username;
 
     @NotBlank
@@ -37,8 +35,6 @@ public class User {
     @Email
     private String email;
 
-    @NotBlank
-    @Size(max = 120)
     private String password;
 
     @ManyToMany(fetch = FetchType.LAZY)

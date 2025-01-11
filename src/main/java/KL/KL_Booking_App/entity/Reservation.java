@@ -21,9 +21,9 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reservationId;
 
-    @Column(name = "reservationType")
-    @Enumerated(EnumType.STRING)
-    private ReservationType reservationType;
+//    @Column(name = "reservationType")
+//    @Enumerated(EnumType.STRING)
+//    private ReservationType reservationType;
 
     private LocalDateTime date;
 
@@ -44,7 +44,7 @@ public class Reservation {
     @Column(name = "updatedAt",insertable = false)
     private Timestamp updatedAt;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     @JoinColumn(name = "discount_id", referencedColumnName = "discountId")
     @JsonIgnore
     private Discount discount;
@@ -53,8 +53,8 @@ public class Reservation {
 //    @JsonBackReference
     private List<ReservationRoom> reservationRoom;
 
-    @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Payment> payment;
+    @OneToOne(mappedBy = "reservation", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Payment payment;
 
     @ManyToOne(cascade = CascadeType.PERSIST )
     @JoinColumn(name = "user_id")
@@ -63,9 +63,9 @@ public class Reservation {
     public Reservation() {
     }
 
-    public Reservation(Long reservationId, ReservationType reservationType, LocalDateTime date, LocalDateTime checkIn, LocalDateTime checkOut, double totalAmount, Timestamp createdAt, Timestamp updatedAt, Discount discount, List<ReservationRoom> reservationRoom, List<Payment> payment, User user) {
+    public Reservation(Long reservationId, LocalDateTime date, LocalDateTime checkIn, LocalDateTime checkOut, double totalAmount, Timestamp createdAt, Timestamp updatedAt, Discount discount, List<ReservationRoom> reservationRoom, Payment payment, User user) {
         this.reservationId = reservationId;
-        this.reservationType = reservationType;
+//        this.reservationType = reservationType;
         this.date = date;
         this.checkIn = checkIn;
         this.checkOut = checkOut;
@@ -86,11 +86,11 @@ public class Reservation {
         this.user = user;
     }
 
-    public List<Payment> getPayment() {
+    public Payment getPayment() {
         return payment;
     }
 
-    public void setPayment(List<Payment> payment) {
+    public void setPayment(Payment payment) {
         this.payment = payment;
     }
 
@@ -100,14 +100,6 @@ public class Reservation {
 
     public void setReservationId(Long reservationId) {
         this.reservationId = reservationId;
-    }
-
-    public ReservationType getReservationType() {
-        return reservationType;
-    }
-
-    public void setReservationType(ReservationType reservationType) {
-        this.reservationType = reservationType;
     }
 
     public LocalDateTime getDate() {

@@ -1,5 +1,6 @@
 package KL.KL_Booking_App.payload.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -10,13 +11,14 @@ import lombok.Builder;
 @Builder
 public class UserDto {
     private long userId;
-
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String firstName;
-
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String lastName;
 
     @NotBlank(message = "Phone number must not be blank.")
     @Pattern(regexp = "^\\d{10}$", message = "Phone number must be exactly 10 digits.")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String phone;
 
     @Email
@@ -24,6 +26,7 @@ public class UserDto {
     @NotBlank(message = "Email must not be blank")
     @Size(max = 50)
     @Column(unique = true)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String mail;
 
     public UserDto() {

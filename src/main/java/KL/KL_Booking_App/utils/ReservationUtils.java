@@ -12,10 +12,11 @@ public class ReservationUtils {
         return ReservationDto
                 .builder()
                 .reservationId(reservation.getReservationId())
-                .reservationType(reservation.getReservationType())
+//                .reservationType(reservation.getReservationType())
                 .checkIn(reservation.getCheckIn())
                 .checkOut(reservation.getCheckOut())
                 .totalAmount(reservation.getTotalAmount())
+                .payment(reservation.getPayment())
                 .build();
     }
 }

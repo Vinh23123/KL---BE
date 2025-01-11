@@ -18,7 +18,7 @@ import java.util.List;
 public class ReservationDto {
     private Long reservationId;
 
-    private ReservationType reservationType;
+//    private ReservationType reservationType;
 
     @FutureOrPresent(message = "The check in date must not be in the past.")
     @NotNull(message = "The check in date must be not null")
@@ -37,14 +37,14 @@ public class ReservationDto {
     private List<ReservationRoom> reservationRoom;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private List<Payment> payment;
+    private Payment payment;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<RoomDto> rooms;
 
-    public ReservationDto(Long reservationId, ReservationType reservationType, LocalDateTime checkIn, LocalDateTime checkOut, double totalAmount, Discount discount, List<ReservationRoom> reservationRoom, List<Payment> payment, List<RoomDto> rooms) {
+    public ReservationDto(Long reservationId, LocalDateTime checkIn, LocalDateTime checkOut, double totalAmount, Discount discount, List<ReservationRoom> reservationRoom, Payment payment, List<RoomDto> rooms) {
         this.reservationId = reservationId;
-        this.reservationType = reservationType;
+//        this.reservationType = reservationType;
         this.checkIn = checkIn;
         this.checkOut = checkOut;
         this.totalAmount = totalAmount;
@@ -69,15 +69,6 @@ public class ReservationDto {
     public void setReservationId(Long reservationId) {
         this.reservationId = reservationId;
     }
-
-    public ReservationType getReservationType() {
-        return reservationType;
-    }
-
-    public void setReservationType(ReservationType reservationType) {
-        this.reservationType = reservationType;
-    }
-
 
     public LocalDateTime getCheckIn() {
         return checkIn;
@@ -119,11 +110,11 @@ public class ReservationDto {
         this.reservationRoom = reservationRoom;
     }
 
-    public List<Payment> getPayment() {
+    public Payment getPayment() {
         return payment;
     }
 
-    public void setPayment(List<Payment> payment) {
+    public void setPayment(Payment payment) {
         this.payment = payment;
     }
 }

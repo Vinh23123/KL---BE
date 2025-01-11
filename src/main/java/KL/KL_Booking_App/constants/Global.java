@@ -30,4 +30,5 @@ public class Global {
     public static final String MESSAGE_REGISTER_SUCCESSFULLY = "REGISTER SUCCESSFULLY";
     public static final String MESSAGE_SIGN_IN_SUCCESSFULLY = "SIGN IN SUCCESSFULLY";
     public static final String MESSAGE_REFRESH_TOKEN_SUCCESSFULLY = "GET ACCESS TOKEN SUCCESSFULLY";
+    public static final String MESSAGE_SIGN_OUT_SUCCESSFULLY = "SIGN OUT SUCCESSFULLY";
 }

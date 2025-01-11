@@ -7,7 +7,9 @@ import KL.KL_Booking_App.payload.response.HotelDto;
 import KL.KL_Booking_App.repository.HotelRepository;
 import KL.KL_Booking_App.repository.UserRepository;
 import KL.KL_Booking_App.service.IHotelService;
+import KL.KL_Booking_App.service.sec.UserDetailsImpl;
 import KL.KL_Booking_App.utils.HotelUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,7 +36,8 @@ public class HotelServiceImpl implements IHotelService {
 
     @Override
     public List<HotelDto> getAll() {
-        long userId = 1;
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = userDetails.getId();
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
 
         List<Hotel> reservations = hotelRepository.findByUserUserId(user.getUserId());
@@ -46,10 +49,12 @@ public class HotelServiceImpl implements IHotelService {
         // retrieve current user id to add hotel
         // retrieve current id user -> get all reservations
         // Fake user id 1
-        long userId = 1;
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = userDetails.getId();
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
 
         Hotel hotel =  hotelUtils.mapToEntity(hotelDto);
+        hotel.setUser(user);
         Hotel savedhotel = hotelRepository.save(hotel);
         return hotelUtils.mapToDto(savedhotel);
     }
@@ -74,7 +79,8 @@ public class HotelServiceImpl implements IHotelService {
 
     @Override
     public HotelDto fetchCurrentHotel() {
-        long userId = 1;
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = userDetails.getId();
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
         Hotel hotel = user.getHotel();
         return hotelUtils.mapToDto(hotel);
