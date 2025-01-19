@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.format.annotation.NumberFormat;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -22,6 +23,7 @@ public class Room {
     @Column(name = "roomNumber")
     private int roomNumber;
 
+    @Lob
     private String description;
 
     private int capacity;
@@ -34,6 +36,8 @@ public class Room {
     @Column(name = "viewType")
     @Enumerated(EnumType.STRING)
     private ViewType viewType;
+
+    private double pricePerNight;
 
     @CreationTimestamp
     @Column(name = "createdAt",updatable = false)
@@ -49,23 +53,22 @@ public class Room {
     private Hotel hotel;
 
     // orphanRemoval = true -> delete orphaned entities from the database.
+//    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     @Column(name = "roomImage")
-    @JsonIgnore
     private List<RoomImage> roomImage;
 
-    @OneToMany(mappedBy = "room")
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<ReservationRoom> reservationRoom;
 
-    @OneToMany(mappedBy = "room")
-    @JsonIgnore
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews;
 
     public Room() {
     }
 
-    public Room(Long roomId, int roomNumber, String description, int capacity, double price, RoomType status, ViewType viewType, Timestamp createdAt, Timestamp updatedAt, Hotel hotel, List<RoomImage> roomImage, List<ReservationRoom> reservationRoom, List<Review> reviews) {
+    public Room(Long roomId, int roomNumber, String description, int capacity, double price, RoomType status, ViewType viewType, double pricePerNight, Timestamp createdAt, Timestamp updatedAt, Hotel hotel, List<RoomImage> roomImage, List<ReservationRoom> reservationRoom, List<Review> reviews) {
         this.roomId = roomId;
         this.roomNumber = roomNumber;
         this.description = description;
@@ -73,12 +76,21 @@ public class Room {
         this.price = price;
         this.status = status;
         this.viewType = viewType;
+        this.pricePerNight = pricePerNight;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.hotel = hotel;
         this.roomImage = roomImage;
         this.reservationRoom = reservationRoom;
         this.reviews = reviews;
+    }
+
+    public double getPricePerNight() {
+        return pricePerNight;
+    }
+
+    public void setPricePerNight(double pricePerNight) {
+        this.pricePerNight = pricePerNight;
     }
 
     public Long getRoomId() {

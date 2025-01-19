@@ -15,11 +15,11 @@ public class HotelUtils {
                 .email(hotel.getEmail())
                 .description(hotel.getDescription())
                 .location(hotel.getLocation())
-                .location(hotel.getLocation())
                 .build();
     }
 
     public Hotel mapToEntity(HotelDto hotelDto){
+        // FAKE USER ID to add user : NOTE
         return Hotel.builder()
                 .hotelName(hotelDto.getHotelName())
                 .phoneNumber(hotelDto.getPhoneNumber())

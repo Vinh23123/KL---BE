@@ -2,6 +2,7 @@ package KL.KL_Booking_App.entity;
 
 import KL.KL_Booking_App.entity.paymentType.PaymentMethod;
 import KL.KL_Booking_App.entity.paymentType.PaymentType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -16,7 +17,9 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long paymentId;
 
-    private double amount;
+    private String amount;
+
+    private  String orderInfo;
 
     @Column(name = "transactionId",unique = true)
     private String transactionId;
@@ -36,27 +39,48 @@ public class Payment {
     @Column(name = "createdAt",updatable = false)
     private Timestamp createdAt;
 
+    private String vnpTransactionRef;
+
     @UpdateTimestamp
     @Column(name = "updatedAt",insertable = false)
     private Timestamp updatedAt;
 
     @ManyToOne
     @JoinColumn(name = "reservation_id")
+    @JsonIgnore
     private Reservation reservation;
 
     public Payment() {
     }
 
-    public Payment(Long paymentId, double amount, String transactionId, LocalDateTime paymentDate, PaymentType paymentStatus, PaymentMethod paymentMethod, Timestamp createdAt, Timestamp updatedAt, Reservation reservation) {
+    public Payment(Long paymentId, String amount, String orderInfo, String transactionId, LocalDateTime paymentDate, PaymentType paymentStatus, PaymentMethod paymentMethod, Timestamp createdAt, String vnpTransactionRef, Timestamp updatedAt, Reservation reservation) {
         this.paymentId = paymentId;
         this.amount = amount;
+        this.orderInfo = orderInfo;
         this.transactionId = transactionId;
         this.paymentDate = paymentDate;
         this.paymentStatus = paymentStatus;
         this.paymentMethod = paymentMethod;
         this.createdAt = createdAt;
+        this.vnpTransactionRef = vnpTransactionRef;
         this.updatedAt = updatedAt;
         this.reservation = reservation;
+    }
+
+    public String getVnpTransactionRef() {
+        return vnpTransactionRef;
+    }
+
+    public void setVnpTransactionRef(String vnpTransactionRef) {
+        this.vnpTransactionRef = vnpTransactionRef;
+    }
+
+    public String getOrderInfo() {
+        return orderInfo;
+    }
+
+    public void setOrderInfo(String orderInfo) {
+        this.orderInfo = orderInfo;
     }
 
     public Long getPaymentId() {
@@ -67,11 +91,11 @@ public class Payment {
         this.paymentId = paymentId;
     }
 
-    public double getAmount() {
+    public String getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(String amount) {
         this.amount = amount;
     }
 

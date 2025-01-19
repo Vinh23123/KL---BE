@@ -11,6 +11,7 @@ import lombok.Builder;
 @Builder
 public class LocationDto {
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Long locationId;
 
     @NotNull(message = "Latitude must not be null")
@@ -23,21 +24,32 @@ public class LocationDto {
     @DecimalMax(value = "180.0", message = "Longitude must be less than or equal to 180")
     private double longitude;
 
+    private String formattedAddress;
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Hotel hotel;
 
     public LocationDto() {
     }
 
-    public LocationDto(Long locationId, double latitude, double longitude, Hotel hotel) {
+    public LocationDto(Long locationId, double latitude, double longitude, String formattedAddress, Hotel hotel) {
         this.locationId = locationId;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.formattedAddress = formattedAddress;
         this.hotel = hotel;
     }
 
     public Hotel getHotel() {
         return hotel;
+    }
+
+    public String getFormattedAddress() {
+        return formattedAddress;
+    }
+
+    public void setFormattedAddress(String formattedAddress) {
+        this.formattedAddress = formattedAddress;
     }
 
     public void setHotel(Hotel hotel) {

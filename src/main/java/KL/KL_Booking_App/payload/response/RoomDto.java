@@ -1,6 +1,7 @@
 package KL.KL_Booking_App.payload.response;
 
 import KL.KL_Booking_App.entity.Hotel;
+import KL.KL_Booking_App.entity.Reservation;
 import KL.KL_Booking_App.entity.ReservationRoom;
 import KL.KL_Booking_App.entity.Review;
 import KL.KL_Booking_App.entity.roomType.RoomType;
@@ -9,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
 import java.util.List;
@@ -19,24 +21,26 @@ public class RoomDto {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Long roomId;
 
-    @NotBlank(message = "Room Number must not be blank.")
+    @NotNull(message = "Room Number must not be null.")
     private int roomNumber;
 
+    @Size(max = 1200, message = "The description can not be larger than 1200 characters")
     private String description;
 
-    @NotBlank(message = "Capacity must not be blank.")
+    @NotNull(message = "Capacity must not be null.")
     private int capacity;
 
-    @NotBlank(message = "Price must not be blank.")
-    @NotNull(message = "Price must not be null")
     private double price;
 
 
-    @NotBlank(message = "Status must not be blank.")
+    @NotNull(message = "Status must not be null.")
     private RoomType status;
 
-    @NotBlank(message = "ViewType must not be blank.")
+    @NotNull(message = "ViewType must not be null.")
     private ViewType viewType;
+
+    @NotNull(message = "Price Per Night must not be null.")
+    private double pricePerNight;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Hotel hotel;
@@ -48,12 +52,15 @@ public class RoomDto {
     private List<ReservationRoom> reservationRoom;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    private List<ReservationDto> reservationList;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<Review> reviews;
 
     public RoomDto() {
     }
 
-    public RoomDto(Long roomId, int roomNumber, String description, int capacity, double price, RoomType status, ViewType viewType, Hotel hotel, List<RoomImageDto> roomImageDtos, List<ReservationRoom> reservationRoom, List<Review> reviews) {
+    public RoomDto(Long roomId, int roomNumber, String description, int capacity, double price, RoomType status, ViewType viewType, double pricePerNight, Hotel hotel, List<RoomImageDto> roomImageDtos, List<ReservationRoom> reservationRoom, List<ReservationDto> reservationList, List<Review> reviews) {
         this.roomId = roomId;
         this.roomNumber = roomNumber;
         this.description = description;
@@ -61,10 +68,28 @@ public class RoomDto {
         this.price = price;
         this.status = status;
         this.viewType = viewType;
+        this.pricePerNight = pricePerNight;
         this.hotel = hotel;
         this.roomImageDtos = roomImageDtos;
         this.reservationRoom = reservationRoom;
+        this.reservationList = reservationList;
         this.reviews = reviews;
+    }
+
+    public List<ReservationDto> getReservationList() {
+        return reservationList;
+    }
+
+    public void setReservationList(List<ReservationDto> reservationList) {
+        this.reservationList = reservationList;
+    }
+
+    public double getPricePerNight() {
+        return pricePerNight;
+    }
+
+    public void setPricePerNight(double pricePerNight) {
+        this.pricePerNight = pricePerNight;
     }
 
     public Long getRoomId() {

@@ -1,7 +1,9 @@
 package KL.KL_Booking_App.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Builder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -10,6 +12,7 @@ import java.time.LocalDateTime;
 
 @Table(name = "Review")
 @Entity
+@Builder
 public class Review {
 
     @Id
@@ -21,10 +24,12 @@ public class Review {
 
     private String title;
 
+    @Lob
     private String comment;
 
-    @Column(name = "reviewDate")
-    private LocalDateTime reviewDate;
+    @CreationTimestamp
+    @Column(name = "reviewDate", updatable = false)
+    private Timestamp reviewDate;
 
     @CreationTimestamp
     @Column(name = "createdAt",updatable = false)
@@ -36,13 +41,17 @@ public class Review {
 
     @ManyToOne
     @JoinColumn(name = "room_id")
-//    @JsonBackReference
+    @JsonIgnore
     private Room room;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Review() {
     }
 
-    public Review(Long reviewId, int rating, String title, String comment, LocalDateTime reviewDate, Timestamp createdAt, Timestamp updatedAt, Room room) {
+    public Review(Long reviewId, int rating, String title, String comment, Timestamp reviewDate, Timestamp createdAt, Timestamp updatedAt, Room room, User user ) {
         this.reviewId = reviewId;
         this.rating = rating;
         this.title = title;
@@ -51,6 +60,15 @@ public class Review {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.room = room;
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Long getReviewId() {
@@ -85,11 +103,11 @@ public class Review {
         this.comment = comment;
     }
 
-    public LocalDateTime getReviewDate() {
+    public Timestamp getReviewDate() {
         return reviewDate;
     }
 
-    public void setReviewDate(LocalDateTime reviewDate) {
+    public void setReviewDate(Timestamp reviewDate) {
         this.reviewDate = reviewDate;
     }
 

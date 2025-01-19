@@ -9,7 +9,6 @@ import KL.KL_Booking_App.service.IHotelService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
@@ -17,6 +16,7 @@ import java.util.Date;
 
 @RestController
 @RequestMapping("api/v1")
+@CrossOrigin(origins = "http://localhost:5173")
 public class HotelController {
 
     private final IHotelService hotelService;
@@ -25,14 +25,14 @@ public class HotelController {
         this.hotelService = hotelService;
     }
 
-    @GetMapping(HotelApi.HOTEL_BY_ID)
-    public ResponseEntity<Response> fetchHotelById(@PathVariable(value = "hotelId") Long hotelId){
+    @GetMapping("/user" + HotelApi.HOTELS)
+    public ResponseEntity<Response> fetchHotelById(){
         try {
-            Hotel hotel = hotelService.findHotelById(hotelId);
+            HotelDto hotelDto = hotelService.fetchCurrentHotel();
             return new ResponseEntity<>(
                     Response.builder()
                             .status(Global.STATUS_SUCCESS)
-                            .data(hotel)
+                            .data(hotelDto)
                             .message(Global.MESSAGE_GET_SUCCESSFULLY)
                             .time(new SimpleDateFormat("dd-MM-yyyy").format(new Date()))
                             .build(),

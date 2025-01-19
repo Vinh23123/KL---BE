@@ -10,6 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Entity
@@ -20,9 +21,9 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reservationId;
 
-    @Column(name = "reservationType")
-    @Enumerated(EnumType.STRING)
-    private ReservationType reservationType;
+//    @Column(name = "reservationType")
+//    @Enumerated(EnumType.STRING)
+//    private ReservationType reservationType;
 
     private LocalDateTime date;
 
@@ -43,33 +44,54 @@ public class Reservation {
     @Column(name = "updatedAt",insertable = false)
     private Timestamp updatedAt;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "discount_id", referencedColumnName = "discountId")
-//    @JsonManagedReference
     @JsonIgnore
     private Discount discount;
 
-    @OneToMany(mappedBy = "reservation")
+    @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, orphanRemoval = true)
 //    @JsonBackReference
     private List<ReservationRoom> reservationRoom;
 
-    @OneToMany(mappedBy = "reservation")
-    private List<Payment> payment;
+    @OneToOne(mappedBy = "reservation", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Payment payment;
+
+    @ManyToOne(cascade = CascadeType.PERSIST )
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Reservation() {
     }
 
-    public Reservation(Long reservationId, ReservationType reservationType, LocalDateTime date, LocalDateTime checkIn, LocalDateTime checkOut, Timestamp createdAt, double totalAmount, Timestamp updatedAt, Discount discount, List<ReservationRoom>  reservationRoom ) {
+    public Reservation(Long reservationId, LocalDateTime date, LocalDateTime checkIn, LocalDateTime checkOut, double totalAmount, Timestamp createdAt, Timestamp updatedAt, Discount discount, List<ReservationRoom> reservationRoom, Payment payment, User user) {
         this.reservationId = reservationId;
-        this.reservationType = reservationType;
+//        this.reservationType = reservationType;
         this.date = date;
         this.checkIn = checkIn;
         this.checkOut = checkOut;
-        this.createdAt = createdAt;
         this.totalAmount = totalAmount;
+        this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.discount = discount;
         this.reservationRoom = reservationRoom;
+        this.payment = payment;
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
     }
 
     public Long getReservationId() {
@@ -78,14 +100,6 @@ public class Reservation {
 
     public void setReservationId(Long reservationId) {
         this.reservationId = reservationId;
-    }
-
-    public ReservationType getReservationType() {
-        return reservationType;
-    }
-
-    public void setReservationType(ReservationType reservationType) {
-        this.reservationType = reservationType;
     }
 
     public LocalDateTime getDate() {

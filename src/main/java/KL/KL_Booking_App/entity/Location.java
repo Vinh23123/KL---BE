@@ -21,6 +21,8 @@ public class Location {
 
     private double longitude;
 
+    private String formattedAddress;
+
     @CreationTimestamp
     @Column(name = "createdAt",updatable = false)
     private Timestamp createdAt;
@@ -34,16 +36,26 @@ public class Location {
     @JsonIgnore
     private Hotel hotel;
 
-    public Location(Long locationId, double latitude, double longitude, Timestamp createdAt, Timestamp updatedAt, Hotel hotel) {
+
+    public Location() {
+    }
+
+    public Location(Long locationId, double latitude, double longitude, String formattedAddress, Timestamp createdAt, Timestamp updatedAt, Hotel hotel) {
         this.locationId = locationId;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.formattedAddress = formattedAddress;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.hotel = hotel;
     }
 
-    public Location() {
+    public String getFormattedAddress() {
+        return formattedAddress;
+    }
+
+    public void setFormattedAddress(String formattedAddress) {
+        this.formattedAddress = formattedAddress;
     }
 
     public Long getLocationId() {

@@ -15,4 +15,6 @@ public interface IHotelService {
    void delete(HotelDto hotelDto);
 
    HotelDto update(HotelDto hotelDto);
+
+   HotelDto fetchCurrentHotel();
 }

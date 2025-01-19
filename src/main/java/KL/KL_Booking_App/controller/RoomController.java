@@ -5,6 +5,7 @@ import KL.KL_Booking_App.constants.api.HotelApi;
 import KL.KL_Booking_App.constants.api.RoomApi;
 import KL.KL_Booking_App.payload.response.Response;
 import KL.KL_Booking_App.payload.response.RoomDto;
+import KL.KL_Booking_App.payload.response.RoomResponse;
 import KL.KL_Booking_App.service.IRoomService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -20,6 +21,7 @@ import java.util.List;
 
 @RequestMapping("/api/v1")
 @RestController
+@CrossOrigin(origins = "http://localhost:5173")
 public class RoomController {
     private static final Logger log = LoggerFactory.getLogger(RoomController.class);
 
@@ -55,12 +57,17 @@ public class RoomController {
     }
 
     @GetMapping(HotelApi.HOTEL_BY_ID + RoomApi.ROOMS)
-    public ResponseEntity<Response> fetchAllRoomsByHotelId(@PathVariable(value = "hotelId") Long hotelId){
-        List<RoomDto> roomDtos = roomService.getAllRoomsByHotelId(hotelId);
+    public ResponseEntity<Response> fetchAllRoomsByHotelId(@PathVariable(value = "hotelId") Long hotelId,
+                                                           @RequestParam(value = "pageNo", defaultValue = Global.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
+                                                           @RequestParam(value = "pageSize", defaultValue = Global.DEFAULT_PAGE_SIZE, required = false) int pageSize,
+                                                           @RequestParam(value = "sortBy", defaultValue = Global.DEFAULT_SORT_BY, required = false) String sortBy,
+                                                           @RequestParam(value = "sortDir", defaultValue = Global.DEFAULT_SORT_DIRECTION, required = false) String sortDir
+                                                           ){
+        RoomResponse roomResponse = roomService.getAllRoomsByHotelId(hotelId, pageNo, pageSize, sortBy, sortDir);
         return new ResponseEntity<>(
                 Response.builder()
                         .status(Global.STATUS_SUCCESS)
-                        .data(roomDtos)
+                        .data(roomResponse)
                         .message(Global.MESSAGE_GET_SUCCESSFULLY)
                         .time(new SimpleDateFormat("dd-MM-yyyy").format(new Date()))
                         .build()
@@ -119,6 +126,30 @@ public class RoomController {
         }
     }
 
+    @PutMapping(RoomApi.ROOMS + "/{roomId}")
+    public ResponseEntity<Response> updateRoomStatus(@PathVariable(value = "roomId") Long roomId){
+        try {
+            // Call service to create a new room
+            roomService.updateStatus(roomId);
+            // Prepare successful response
+            return new ResponseEntity<>(
+                    Response.builder()
+                            .status(Global.STATUS_SUCCESS)
+                            .message(Global.MESSAGE_UPDATED_SUCCESSFULLY)
+                            .build()
+                    ,HttpStatus.CREATED);
+        } catch (Exception e) {
+            // Log the exception with error level
+            return new ResponseEntity<>(
+                    Response.builder()
+                            .status(Global.STATUS_FAILED)
+                            .message(e.getMessage())
+                            .time(new SimpleDateFormat("dd-MM-yyyy").format(new Date()))
+                            .build()
+                    , HttpStatus.NOT_FOUND);
+        }
+    }
+
     @DeleteMapping(RoomApi.ROOM_BY_ID)
     public ResponseEntity<Response> deleteRoomById(@PathVariable(value = "roomId") Long roomId){
         try{
@@ -141,4 +172,16 @@ public class RoomController {
         }
     }
 
+    @GetMapping(RoomApi.ROOMS)
+    public ResponseEntity<Response> fetchAllRooms(){
+        List<RoomDto> roomDtos = roomService.getAllRooms();
+        return new ResponseEntity<>(
+                Response.builder()
+                        .status(Global.STATUS_SUCCESS)
+                        .data(roomDtos)
+                        .message(Global.MESSAGE_GET_SUCCESSFULLY)
+                        .time(new SimpleDateFormat("dd-MM-yyyy").format(new Date()))
+                        .build()
+                , HttpStatus.OK);
+    }
 }

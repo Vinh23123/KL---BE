@@ -45,15 +45,22 @@ public class Hotel {
     private Timestamp updatedAt;
 
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Room> rooms;
 
-    @OneToOne(mappedBy = "hotel",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "hotel",cascade = CascadeType.ALL)
     private Location location;
+
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
+    private User user;
+
 
     public Hotel() {
     }
 
-    public Hotel(Long hotelId, String hotelName, String phoneNumber, String email, String description, Timestamp createdAt, Timestamp updatedAt, List<Room> rooms, Location location) {
+    public Hotel(Long hotelId, String hotelName, String phoneNumber, String email, String description, Timestamp createdAt, Timestamp updatedAt, List<Room> rooms, Location location, User user) {
         this.hotelId = hotelId;
         this.hotelName = hotelName;
         this.phoneNumber = phoneNumber;
@@ -63,6 +70,15 @@ public class Hotel {
         this.updatedAt = updatedAt;
         this.rooms = rooms;
         this.location = location;
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getPhoneNumber() {

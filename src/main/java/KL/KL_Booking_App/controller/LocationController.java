@@ -18,6 +18,7 @@ import java.util.Date;
 
 @RestController
 @RequestMapping("api/v1")
+@CrossOrigin(origins = "http://localhost:5173")
 public class LocationController {
 
     private static final Logger log = LoggerFactory.getLogger(LocationController.class);
@@ -68,4 +69,47 @@ public class LocationController {
                     .build(), HttpStatus.NOT_FOUND);
         }
     }
+
+    @PostMapping(LocationApi.LOCATIONS + "/convert-location")
+    public ResponseEntity<Response> convertLocationToAddress(@Valid @RequestBody LocationDto locationDto){
+
+        try {
+        LocationDto address = locationService.convertLatLongToAddress(locationDto);
+            return new ResponseEntity<>( Response.builder()
+                    .status(Global.STATUS_SUCCESS)
+                    .data(address)
+                    .message(Global.MESSAGE_GET_SUCCESSFULLY)
+                    .time(new SimpleDateFormat("dd-MM-yyyy").format(new Date()))
+                    .build(), HttpStatus.CREATED);
+        }catch (Exception e){
+            log.info(e.getMessage());
+            return new ResponseEntity<>( Response.builder()
+                    .status(Global.STATUS_FAILED)
+                    .message(e.getMessage())
+                    .time(new SimpleDateFormat("dd-MM-yyyy").format(new Date()))
+                    .build(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping(LocationApi.LOCATIONS + "/convert-location-address")
+    public ResponseEntity<Response> convertAddressLocationTo(@Valid @RequestBody LocationDto locationDto){
+
+        try {
+            LocationDto address = locationService.convertAddressToLatLong(locationDto);
+            return new ResponseEntity<>( Response.builder()
+                    .status(Global.STATUS_SUCCESS)
+                    .data(address)
+                    .message(Global.MESSAGE_GET_SUCCESSFULLY)
+                    .time(new SimpleDateFormat("dd-MM-yyyy").format(new Date()))
+                    .build(), HttpStatus.CREATED);
+        }catch (Exception e){
+            log.info(e.getMessage());
+            return new ResponseEntity<>( Response.builder()
+                    .status(Global.STATUS_FAILED)
+                    .message(e.getMessage())
+                    .time(new SimpleDateFormat("dd-MM-yyyy").format(new Date()))
+                    .build(), HttpStatus.NOT_FOUND);
+        }
+    }
+
 }
