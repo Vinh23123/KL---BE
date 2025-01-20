@@ -125,7 +125,7 @@ public class ReservationController {
     @GetMapping("/reservations/{reservationId}")
     public ResponseEntity<Response> getReservationById(@PathVariable(value = "reservationId") Long reservationId ){
         Reservation reservation = reservationService.getReservationById(reservationId);
-        ReservationDto reservationDto = reservationUtils.mapToReservationDto(reservation);
+        ReservationDto reservationDto = reservationUtils.mapToReservationDtoIncludedUser(reservation);
         return new ResponseEntity<>(
                 Response.builder()
                         .status(Global.STATUS_SUCCESS)
