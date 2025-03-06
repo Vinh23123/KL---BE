@@ -42,9 +42,10 @@ public class ReservationDto {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<RoomDto> rooms;
 
-    public ReservationDto(Long reservationId, LocalDateTime checkIn, LocalDateTime checkOut, double totalAmount, Discount discount, List<ReservationRoom> reservationRoom, Payment payment, List<RoomDto> rooms) {
+    private UserDto userDto;
+
+    public ReservationDto(Long reservationId, LocalDateTime checkIn, LocalDateTime checkOut, double totalAmount, Discount discount, List<ReservationRoom> reservationRoom, Payment payment, List<RoomDto> rooms, UserDto userDto) {
         this.reservationId = reservationId;
-//        this.reservationType = reservationType;
         this.checkIn = checkIn;
         this.checkOut = checkOut;
         this.totalAmount = totalAmount;
@@ -52,6 +53,15 @@ public class ReservationDto {
         this.reservationRoom = reservationRoom;
         this.payment = payment;
         this.rooms = rooms;
+        this.userDto = userDto;
+    }
+
+    public UserDto getUserDto() {
+        return userDto;
+    }
+
+    public void setUserDto(UserDto userDto) {
+        this.userDto = userDto;
     }
 
     public List<RoomDto> getRooms() {
